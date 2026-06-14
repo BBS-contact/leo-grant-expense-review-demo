@@ -1,0 +1,1999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LEO Grant Expense Review Dashboard v1.0</title>
+  <style>
+    :root {
+      --bg: #f5f7fb;
+      --panel: #ffffff;
+      --panel-soft: #f8fafc;
+      --text: #172033;
+      --muted: #64748b;
+      --border: #d8e0ea;
+      --border-soft: #e7edf5;
+      --high: #9f1239;
+      --medium: #92400e;
+      --low: #0369a1;
+      --ok: #166534;
+      --warn: #92400e;
+      --danger: #991b1b;
+      --shadow: 0 16px 40px rgba(15, 23, 42, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+
+    header {
+      padding: 28px 32px 22px;
+      background: #0f172a;
+      color: #ffffff;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    header h1 {
+      margin: 0 0 8px;
+      font-size: 28px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    header p {
+      margin: 0;
+      color: #cbd5e1;
+      max-width: 1160px;
+      font-size: 15px;
+    }
+
+    main {
+      padding: 24px 32px 48px;
+      max-width: 1540px;
+      margin: 0 auto;
+    }
+
+    .grid { display: grid; gap: 16px; }
+    .grid.cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .grid.cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .grid.cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+
+    .panel {
+      background: var(--panel);
+      border: 1px solid var(--border-soft);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 18px;
+    }
+
+    .panel h2 { margin: 0 0 12px; font-size: 18px; letter-spacing: -0.02em; }
+    .panel h3 { margin: 0 0 8px; font-size: 15px; }
+
+    .metric { display: flex; flex-direction: column; gap: 4px; }
+    .metric .label {
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+    .metric .value { font-size: 26px; font-weight: 700; letter-spacing: -0.04em; }
+    .metric .note { font-size: 13px; color: var(--muted); }
+
+    .status-pill,
+    .severity-pill,
+    .action-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      white-space: nowrap;
+    }
+
+    .status-ok { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; }
+    .status-warn { color: var(--warn); border-color: #fed7aa; background: #fff7ed; }
+    .status-danger { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
+
+    .severity-HIGH,
+    .severity-CRITICAL { color: var(--high); border-color: #fecdd3; background: #fff1f2; }
+    .severity-MEDIUM { color: var(--medium); border-color: #fed7aa; background: #fffbeb; }
+    .severity-LOW,
+    .severity-INFO { color: var(--low); border-color: #bae6fd; background: #f0f9ff; }
+
+    .toolbar { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; margin: 0 0 16px; }
+
+    input,
+    select,
+    textarea,
+    button { font: inherit; }
+
+    input,
+    select,
+    textarea {
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 9px 11px;
+      background: #ffffff;
+      color: var(--text);
+    }
+
+    input[type="file"] { padding: 8px; background: var(--panel-soft); }
+    textarea { width: 100%; min-height: 72px; resize: vertical; }
+
+    button {
+      border: 1px solid #0f172a;
+      border-radius: 12px;
+      padding: 9px 12px;
+      background: #0f172a;
+      color: #ffffff;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    button.secondary { background: #ffffff; color: #0f172a; border-color: var(--border); }
+    button.danger { background: #991b1b; border-color: #991b1b; }
+    button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .small { font-size: 13px; color: var(--muted); }
+    .mono { font-family: Consolas, Menlo, Monaco, monospace; font-size: 12px; }
+    .hidden { display: none !important; }
+
+    .file-row { display: grid; grid-template-columns: 240px 1fr; gap: 12px; align-items: center; margin-top: 10px; }
+
+    .validation-box {
+      margin-top: 14px;
+      border-radius: 14px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+    }
+
+    .validation-box.ok { border-color: #bbf7d0; background: #f0fdf4; }
+    .validation-box.warn { border-color: #fed7aa; background: #fff7ed; }
+    .validation-box.danger { border-color: #fecaca; background: #fef2f2; }
+    .validation-box ul { margin: 8px 0 0; padding-left: 20px; }
+
+    .sticky-reviewer-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(245, 247, 251, 0.94);
+      backdrop-filter: blur(12px);
+      border: 1px solid var(--border-soft);
+      border-radius: 18px;
+      box-shadow: var(--shadow);
+      padding: 12px;
+      margin-bottom: 16px;
+      display: grid;
+      grid-template-columns: minmax(220px, 1.2fr) minmax(280px, 2fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .sticky-progress {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .sticky-filters {
+      display: grid;
+      grid-template-columns: minmax(180px, 1fr) 150px 190px 190px;
+      gap: 8px;
+    }
+
+    .summary-card-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .summary-card {
+      border: 1px solid var(--border-soft);
+      background: var(--panel-soft);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .summary-card strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+      margin-bottom: 5px;
+    }
+
+    .summary-card span {
+      display: block;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+    }
+
+    .table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .table th,
+    .table td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--border-soft); vertical-align: top; }
+    .table th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .boundary-list { display: grid; gap: 7px; margin: 0; padding: 0; list-style: none; }
+    .boundary-list li {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      border-bottom: 1px solid var(--border-soft);
+      padding: 6px 0;
+      font-size: 14px;
+    }
+
+    .reviewer-navigation-grid {
+      display: grid;
+      grid-template-columns: 280px minmax(0, 1fr);
+      gap: 14px;
+      align-items: start;
+    }
+
+    .reviewer-navigation-metrics {
+      display: grid;
+      gap: 8px;
+    }
+
+    .reviewer-navigation-metric {
+      border: 1px solid var(--border-soft);
+      background: var(--panel-soft);
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .reviewer-navigation-metric strong {
+      display: block;
+      font-size: 12px;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 3px;
+    }
+
+    .reviewer-navigation-metric span {
+      font-size: 20px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+    }
+
+    .reviewer-navigation-list {
+      display: grid;
+      gap: 8px;
+      max-height: 360px;
+      overflow: auto;
+      padding-right: 4px;
+    }
+
+    .reviewer-navigation-item {
+      width: 100%;
+      text-align: left;
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      color: var(--text);
+      border-radius: 12px;
+      padding: 9px 10px;
+      display: grid;
+      gap: 4px;
+      cursor: pointer;
+      font-weight: 400;
+    }
+
+    .reviewer-navigation-item:hover {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.08);
+    }
+
+    .reviewer-navigation-title {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      align-items: center;
+      font-size: 13px;
+    }
+
+    .reviewer-navigation-meta {
+      color: var(--muted);
+      font-size: 12px;
+      overflow-wrap: anywhere;
+    }
+
+    .queue-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+      margin-top: 14px;
+    }
+
+    .queue-panel {
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      border-radius: 14px;
+      padding: 12px;
+      overflow-x: auto;
+    }
+
+    .queue-panel h3 {
+      margin: 0 0 8px;
+      font-size: 15px;
+    }
+
+    .queue-note {
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .summary-boundary-note {
+      margin-top: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: var(--panel-soft);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .finding-list { display: grid; gap: 12px; }
+
+    .finding-card {
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      background: #ffffff;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .finding-card.priority-finding {
+      border-color: #fecdd3;
+      box-shadow: 0 10px 28px rgba(159, 18, 57, 0.08);
+    }
+
+    .finding-card.navigation-highlight {
+      border-color: #0f172a;
+      box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.12), var(--shadow);
+    }
+
+    .finding-details {
+      border: 0;
+      padding: 0;
+      margin: 0;
+    }
+
+    .finding-summary {
+      list-style: none;
+      cursor: pointer;
+      display: block;
+      padding: 14px 16px;
+      background: #ffffff;
+    }
+
+    .finding-summary::-webkit-details-marker { display: none; }
+
+    .finding-summary-header {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .finding-summary-main {
+      display: grid;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .finding-summary-title-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .finding-summary-title {
+      font-weight: 800;
+      font-size: 15px;
+    }
+
+    .finding-summary-meta {
+      color: var(--muted);
+      font-size: 13px;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .finding-summary-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .finding-expand-indicator {
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      border-radius: 999px;
+      padding: 4px 9px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--muted);
+    }
+
+    details[open] .finding-expand-indicator::after { content: "Collapse"; }
+    details:not([open]) .finding-expand-indicator::after { content: "Expand"; }
+
+    .finding-body {
+      border-top: 1px solid var(--border-soft);
+      padding: 16px;
+      background: #ffffff;
+    }
+
+    .detail-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 12px; }
+
+    .detail-box {
+      background: var(--panel-soft);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      padding: 12px;
+    }
+
+    .detail-box strong {
+      display: block;
+      font-size: 12px;
+      text-transform: uppercase;
+      color: var(--muted);
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .section-details {
+      margin-top: 12px;
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      background: #f8fafc;
+      overflow: hidden;
+    }
+
+    .section-details > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 12px;
+      font-weight: 800;
+      color: var(--text);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .section-details > summary::-webkit-details-marker { display: none; }
+    .section-details > summary::after { content: "Open"; color: var(--muted); font-size: 12px; }
+    .section-details[open] > summary::after { content: "Close"; }
+
+    .section-details-body { padding: 0 12px 12px; }
+
+    .review-box { margin-top: 12px; border-top: 1px solid var(--border-soft); padding-top: 12px; }
+    .review-row { display: grid; grid-template-columns: 260px 1fr auto; gap: 10px; align-items: start; }
+
+    .attachment-list,
+    .manifest-list { display: grid; gap: 10px; margin-top: 10px; }
+
+    .attachment-item,
+    .manifest-item {
+      border: 1px solid var(--border-soft);
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 10px;
+    }
+
+    .attachment-meta,
+    .manifest-meta {
+      display: grid;
+      gap: 4px;
+      margin-top: 6px;
+      font-size: 13px;
+    }
+
+    .attachment-review-box {
+      margin-top: 10px;
+      border-top: 1px solid var(--border-soft);
+      padding-top: 10px;
+    }
+
+    .boundary-note,
+    .attachment-boundary,
+    .manifest-boundary {
+      margin-top: 10px;
+      padding: 10px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      background: #ffffff;
+    }
+
+    .normative-reference-list { margin: 8px 0 0 18px; padding: 0; }
+    .normative-reference-list li { margin-bottom: 8px; }
+
+    .placeholder-empty {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .handoff-readiness-panel {
+      margin-top: 14px;
+      border: 1px solid var(--border-soft);
+      border-radius: 16px;
+      background: #ffffff;
+      padding: 14px;
+    }
+
+    .handoff-state-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .handoff-state-pill {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      padding: 7px 12px;
+      font-size: 13px;
+      font-weight: 800;
+      border: 1px solid var(--border);
+      background: var(--panel-soft);
+      white-space: nowrap;
+    }
+
+    .handoff-state-ready { color: var(--ok); border-color: #bbf7d0; background: #f0fdf4; }
+    .handoff-state-review { color: var(--warn); border-color: #fed7aa; background: #fff7ed; }
+    .handoff-state-blocked { color: var(--danger); border-color: #fecaca; background: #fef2f2; }
+
+    .handoff-blocker-list { margin: 8px 0 0 18px; padding: 0; }
+    .handoff-blocker-list li { margin-bottom: 6px; }
+
+    .handoff-guidance-box {
+      margin-top: 12px;
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+      padding: 10px;
+      background: var(--panel-soft);
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .empty-state {
+      border: 1px dashed var(--border);
+      background: var(--panel-soft);
+      border-radius: 16px;
+      padding: 24px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    @media (max-width: 1100px) {
+      .sticky-reviewer-bar,
+      .sticky-filters,
+      .reviewer-navigation-grid,
+      .grid.cols-4,
+      .grid.cols-3,
+      .grid.cols-2,
+      .summary-card-grid,
+      .queue-grid,
+      .detail-grid,
+      .review-row,
+      .file-row { grid-template-columns: 1fr; }
+      header,
+      main { padding-left: 18px; padding-right: 18px; }
+      .sticky-reviewer-bar { position: static; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>LEO Grant Expense Review Dashboard v1.0</h1>
+    <p>
+      Local human-review dashboard for grant expense evidence signals. This interface reads local JSON outputs,
+      shows rule traceability, records reviewer actions in browser localStorage, and does not perform donor compliance,
+      fraud, legal, payment, supplier, production, registry, signing, or external execution decisions.
+      Dashboard UI v1.0. Export package schema v0.4. Local review storage schema v1.0.
+    </p>
+  </header>
+
+  <main>
+    <section class="panel" style="margin-bottom: 18px;">
+      <h2>1. Load local grant review outputs</h2>
+      <p class="small">
+        Load the real local outputs generated by the Grant Expense Review pipeline. Required files:
+        <span class="mono">output/grant_expense_input_quality_report.json</span> and
+        <span class="mono">output/grant_expense_evidence_report.json</span>.
+      </p>
+      <div class="file-row">
+        <label for="qualityFile"><strong>Input quality report</strong></label>
+        <input id="qualityFile" type="file" accept="application/json,.json" />
+      </div>
+      <div class="file-row">
+        <label for="evidenceFile"><strong>Evidence report</strong></label>
+        <input id="evidenceFile" type="file" accept="application/json,.json" />
+      </div>
+      <div class="toolbar" style="margin-top: 14px;">
+        <button id="clearLoadedReportsButton" class="secondary" type="button">Clear loaded reports</button>
+        <button id="clearStorageButton" class="danger" type="button">Clear local review actions</button>
+        <button id="exportButton" type="button" disabled>Export human review package</button>
+      </div>
+      <p id="loadStatus" class="small">No report loaded yet.</p>
+      <div id="validationBox" class="validation-box hidden"></div>
+    </section>
+
+    <section id="dashboard" class="hidden">
+      <section class="grid cols-2" style="margin-bottom: 16px;">
+        <div class="panel">
+          <h2>2. Zero-autonomy boundary</h2>
+          <p class="small">
+            First institutional safety check. LEO supports human review only and does not perform autonomous enforcement,
+            production mutation, legal conclusion, donor compliance decision, payment action, supplier action, signing,
+            key access, registry mutation, or external execution.
+          </p>
+          <ul id="zeroBoundaryList" class="boundary-list"></ul>
+        </div>
+        <div class="panel">
+          <h2>3. Interpretation boundary</h2>
+          <p class="small">
+            Second institutional safety check. The report contains review signals and evidence references only. It does not
+            accuse, approve, reject, certify, sanction, or replace the responsible institutional reviewer.
+          </p>
+          <ul id="interpretationBoundaryList" class="boundary-list"></ul>
+        </div>
+      </section>
+
+      <section id="stickyReviewerBar" class="sticky-reviewer-bar">
+        <div class="sticky-progress">
+          <span id="stickyProgressPill" class="status-pill status-warn">Review not started</span>
+          <span id="stickyReviewedCount" class="action-pill">Reviewed: 0</span>
+          <span id="stickyUnreviewedHighCount" class="action-pill">Unreviewed HIGH: 0</span>
+        </div>
+        <div class="sticky-filters">
+          <input id="searchInput" type="search" placeholder="Search title, supplier, signal, rule, question..." />
+          <select id="severityFilter">
+            <option value="ALL">All severities</option>
+            <option value="HIGH">HIGH</option>
+            <option value="CRITICAL">CRITICAL</option>
+            <option value="MEDIUM">MEDIUM</option>
+            <option value="LOW">LOW</option>
+            <option value="INFO">INFO</option>
+          </select>
+          <select id="signalFilter">
+            <option value="ALL">All signal families</option>
+          </select>
+          <select id="reviewFilter">
+            <option value="ALL">All review states</option>
+            <option value="UNREVIEWED">Unreviewed</option>
+            <option value="ACCEPTED_AS_JUSTIFIED">Accepted as justified</option>
+            <option value="ESCALATE_FOR_REVIEW">Escalate for review</option>
+            <option value="MARK_FALSE_POSITIVE">Marked false positive</option>
+            <option value="NEEDS_MORE_EVIDENCE">Needs more evidence</option>
+          </select>
+        </div>
+        <button id="stickyExportButton" type="button">Export</button>
+      </section>
+
+      <section class="grid cols-4" style="margin-bottom: 16px;">
+        <div class="panel metric">
+          <span class="label">Findings</span>
+          <span id="findingsCount" class="value">—</span>
+          <span class="note">Evidence-backed review signals</span>
+        </div>
+        <div class="panel metric">
+          <span class="label">High / Critical</span>
+          <span id="highCount" class="value">—</span>
+          <span class="note">Start review here</span>
+        </div>
+        <div class="panel metric">
+          <span class="label">Input quality</span>
+          <span id="inputQualityStatus" class="value" style="font-size: 20px;">—</span>
+          <span id="inputQualityNote" class="note">—</span>
+        </div>
+        <div class="panel metric">
+          <span class="label">Autonomous actions</span>
+          <span id="autonomousActions" class="value">—</span>
+          <span class="note">Must remain zero</span>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-bottom: 16px;">
+        <h2>4. Priority review queues</h2>
+        <p class="small">
+          Start here after loading and boundary confirmation. Review unresolved HIGH / CRITICAL findings first,
+          then escalation items, then missing-evidence items, then remaining medium-priority findings. This section is
+          procedural guidance for the human reviewer, not a system verdict.
+        </p>
+
+        <div class="summary-card-grid">
+          <div class="summary-card"><strong>Unresolved findings</strong><span id="summaryUnresolvedCount">—</span><p id="summaryUnresolvedNote" class="queue-note">—</p></div>
+          <div class="summary-card"><strong>Unresolved HIGH / CRITICAL</strong><span id="summaryUnresolvedHighCount">—</span><p class="queue-note">First review queue</p></div>
+          <div class="summary-card"><strong>Escalated locally</strong><span id="summaryEscalatedCount">—</span><p class="queue-note">Saved as ESCALATE_FOR_REVIEW</p></div>
+          <div class="summary-card"><strong>Needs more evidence</strong><span id="summaryNeedsEvidenceCount">—</span><p class="queue-note">Saved as NEEDS_MORE_EVIDENCE</p></div>
+        </div>
+
+        <div class="queue-grid">
+          <div class="queue-panel"><h3>Escalation queue</h3><table id="escalationQueueTable" class="table"></table><p id="escalationQueueNote" class="queue-note"></p></div>
+          <div class="queue-panel"><h3>Missing evidence queue</h3><table id="missingEvidenceQueueTable" class="table"></table><p id="missingEvidenceQueueNote" class="queue-note"></p></div>
+          <div class="queue-panel"><h3>Supplier concentration summary</h3><table id="supplierConcentrationTable" class="table"></table><p id="supplierConcentrationNote" class="queue-note"></p></div>
+          <div class="queue-panel"><h3>Deadline-sensitive review queue</h3><table id="deadlineQueueTable" class="table"></table><p id="deadlineQueueNote" class="queue-note"></p></div>
+        </div>
+
+        <div id="exportReadinessBox" class="summary-boundary-note">Export readiness summary will appear after reports are loaded.</div>
+      </section>
+
+      <section class="panel" style="margin-bottom: 16px;">
+        <h2>5. Reviewer workflow navigation</h2>
+        <p class="small">
+          Use this as the working queue. Pick a finding, open it, record the human review action, save, and continue to
+          the next item. The navigation layer does not mutate evidence, issue conclusions, or execute external actions.
+        </p>
+        <div class="reviewer-navigation-grid">
+          <div class="reviewer-navigation-metrics">
+            <div class="reviewer-navigation-metric"><strong>All findings</strong><span id="navAllFindings">—</span></div>
+            <div class="reviewer-navigation-metric"><strong>Reviewed</strong><span id="navReviewedFindings">—</span></div>
+            <div class="reviewer-navigation-metric"><strong>Unreviewed</strong><span id="navUnreviewedFindings">—</span></div>
+            <div class="reviewer-navigation-metric"><strong>Unreviewed HIGH / CRITICAL</strong><span id="navUnreviewedHighFindings">—</span></div>
+            <div class="reviewer-navigation-metric"><strong>Escalated</strong><span id="navEscalatedFindings">—</span></div>
+            <div class="reviewer-navigation-metric"><strong>Needs more evidence</strong><span id="navNeedsEvidenceFindings">—</span></div>
+            <div class="reviewer-navigation-metric"><strong>Attachment blockers</strong><span id="navAttachmentBlockers">—</span></div>
+          </div>
+          <div>
+            <h3>Finding queue</h3>
+            <div id="reviewerNavigationList" class="reviewer-navigation-list">
+              <div class="empty-state">Load reports to display the local finding queue.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-bottom: 16px;">
+        <h2>6. Advisory institutional handoff readiness</h2>
+        <p class="small">
+          This section becomes useful after several review actions are saved. It summarizes whether the local package is
+          ready for internal human handoff or still has review blockers. It does not approve, reject, submit, pay,
+          sanction, mutate, sign, access keys, or execute external actions.
+        </p>
+        <div id="institutionalHandoffReadinessPanel" class="handoff-readiness-panel">
+          Advisory handoff readiness will appear after reports are loaded.
+        </div>
+      </section>
+
+      <section class="grid cols-3" style="margin-bottom: 16px;">
+        <div class="panel">
+          <h2>7. Analytical severity distribution</h2>
+          <p class="small">Reference statistics only. Do not start review from this table.</p>
+          <table id="severityTable" class="table"></table>
+        </div>
+        <div class="panel">
+          <h2>Signal families</h2>
+          <p class="small">Technical grouping for orientation after the priority queues are understood.</p>
+          <table id="signalFamilyTable" class="table"></table>
+        </div>
+        <div class="panel">
+          <h2>Review progress</h2>
+          <div class="metric">
+            <span class="label">Reviewed findings</span>
+            <span id="reviewedCount" class="value">0</span>
+            <span id="reviewedNote" class="note">Stored locally in this browser</span>
+          </div>
+          <div style="margin-top: 12px;">
+            <span id="reviewProgressPill" class="status-pill">Not started</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel" style="margin-bottom: 16px;">
+        <h2>8. Findings requiring human review</h2>
+        <p class="small">
+          This is the detailed investigation stage. Open only the finding currently under review. Core review summary and
+          human review action are shown first; rule trace, normative placeholders, evidence attachments, and manifest data
+          remain available on demand without being forced into the first screen.
+        </p>
+        <div id="findingList" class="finding-list"></div>
+      </section>
+    </section>
+  </main>
+
+  <script>
+    const STORAGE_KEY = "leo_grant_expense_review_actions_v1_0";
+    const ATTACHMENT_STORAGE_KEY = "leo_grant_expense_attachment_review_actions_v1_0";
+    const LEGACY_STORAGE_KEYS = [
+      "leo_grant_expense_review_actions_v0_9_1",
+      "leo_grant_expense_review_actions_v0_3"
+    ];
+    const LEGACY_ATTACHMENT_STORAGE_KEYS = [
+      "leo_grant_expense_attachment_review_actions_v0_9_1",
+      "leo_grant_expense_attachment_review_actions_v1"
+    ];
+
+    const state = {
+      inputQualityReport: null,
+      evidenceReport: null,
+      reviews: loadReviews(),
+      attachmentReviews: loadAttachmentReviews(),
+      filters: {
+        search: "",
+        severity: "ALL",
+        signalFamily: "ALL",
+        reviewState: "ALL",
+      },
+      expandedFindingIds: new Set()
+    };
+
+    document.getElementById("qualityFile").addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const payload = await readJsonFile(file);
+        if (!looksLikeInputQualityReport(payload)) {
+          showValidation("danger", ["Selected file does not look like grant_expense_input_quality_report.json. Expected report_id LOCAL_GRANT_EXPENSE_INPUT_QUALITY_REPORT or input quality status fields."]);
+          return;
+        }
+        state.inputQualityReport = payload;
+        updateLoadStatus();
+        renderIfReady();
+      } catch (error) {
+        showValidation("danger", ["Could not read input quality JSON: " + error.message]);
+      }
+    });
+
+    document.getElementById("evidenceFile").addEventListener("change", async (event) => {
+      const file = event.target.files[0];
+      if (!file) return;
+      try {
+        const payload = await readJsonFile(file);
+        if (!looksLikeEvidenceReport(payload)) {
+          showValidation("danger", ["Selected file does not look like grant_expense_evidence_report.json. Expected report_id LOCAL_GRANT_EXPENSE_REVIEW_REPORT and findings list."]);
+          return;
+        }
+        state.evidenceReport = payload;
+        updateLoadStatus();
+        renderIfReady();
+      } catch (error) {
+        showValidation("danger", ["Could not read evidence report JSON: " + error.message]);
+      }
+    });
+
+    document.getElementById("clearLoadedReportsButton").addEventListener("click", () => {
+      state.inputQualityReport = null;
+      state.evidenceReport = null;
+      state.expandedFindingIds.clear();
+      document.getElementById("qualityFile").value = "";
+      document.getElementById("evidenceFile").value = "";
+      document.getElementById("dashboard").classList.add("hidden");
+      document.getElementById("exportButton").disabled = true;
+      hideValidation();
+      updateLoadStatus("Loaded reports cleared. Select the two real JSON files again.");
+    });
+
+    document.getElementById("clearStorageButton").addEventListener("click", () => {
+      if (!confirm("Clear all locally stored review actions for this dashboard?")) return;
+      state.reviews = {};
+      state.attachmentReviews = {};
+      saveReviews();
+      saveAttachmentReviews();
+      renderDashboard();
+    });
+
+    document.getElementById("exportButton").addEventListener("click", exportReviewPackage);
+    document.getElementById("stickyExportButton").addEventListener("click", exportReviewPackage);
+
+    document.getElementById("searchInput").addEventListener("input", (event) => {
+      state.filters.search = event.target.value.trim().toLowerCase();
+      renderFindings();
+    });
+
+    document.getElementById("severityFilter").addEventListener("change", (event) => {
+      state.filters.severity = event.target.value;
+      renderFindings();
+    });
+
+    document.getElementById("signalFilter").addEventListener("change", (event) => {
+      state.filters.signalFamily = event.target.value;
+      renderFindings();
+    });
+
+    document.getElementById("reviewFilter").addEventListener("change", (event) => {
+      state.filters.reviewState = event.target.value;
+      renderFindings();
+    });
+
+    async function readJsonFile(file) {
+      const text = await file.text();
+      return JSON.parse(text);
+    }
+
+    function looksLikeInputQualityReport(payload) {
+      if (!payload || typeof payload !== "object") return false;
+      if (payload.report_id === "LOCAL_GRANT_EXPENSE_INPUT_QUALITY_REPORT") return true;
+      return typeof payload.status === "string" && payload.summary && typeof payload.summary === "object" && "ready_for_analysis" in payload.summary;
+    }
+
+    function looksLikeEvidenceReport(payload) {
+      if (!payload || typeof payload !== "object") return false;
+      return payload.report_id === "LOCAL_GRANT_EXPENSE_REVIEW_REPORT" && Array.isArray(payload.findings) && payload.summary && typeof payload.summary === "object";
+    }
+
+    function updateLoadStatus(customMessage) {
+      const qualityLoaded = Boolean(state.inputQualityReport);
+      const evidenceLoaded = Boolean(state.evidenceReport);
+      const message = customMessage || `Input quality loaded: ${qualityLoaded ? "yes" : "no"}. Evidence report loaded: ${evidenceLoaded ? "yes" : "no"}.`;
+      document.getElementById("loadStatus").textContent = message;
+    }
+
+    function renderIfReady() {
+      if (state.inputQualityReport && state.evidenceReport) {
+        renderDashboard();
+      }
+    }
+
+    function validateReportConsistency(report) {
+      const issues = [];
+      const findings = Array.isArray(report.findings) ? report.findings : [];
+      const evidenceObjects = Array.isArray(report.evidence_objects) ? report.evidence_objects : [];
+      const summary = report.summary || {};
+
+      if (summary.findings_count !== findings.length) {
+        issues.push(`summary.findings_count is ${summary.findings_count}, but findings.length is ${findings.length}.`);
+      }
+      if (summary.evidence_count !== evidenceObjects.length) {
+        issues.push(`summary.evidence_count is ${summary.evidence_count}, but evidence_objects.length is ${evidenceObjects.length}.`);
+      }
+      if (summary.autonomous_actions !== 0) {
+        issues.push(`summary.autonomous_actions must be 0, got ${summary.autonomous_actions}.`);
+      }
+      const highCount = findings.filter((finding) => finding.severity === "HIGH" || finding.severity === "CRITICAL").length;
+      if (summary.high_or_critical_findings_count !== highCount) {
+        issues.push(`summary.high_or_critical_findings_count is ${summary.high_or_critical_findings_count}, but computed high/critical count is ${highCount}.`);
+      }
+      const highWithoutTrace = findings.filter((finding) => (finding.severity === "HIGH" || finding.severity === "CRITICAL") && !finding.rule_trace);
+      if (highWithoutTrace.length > 0) {
+        issues.push(`${highWithoutTrace.length} HIGH/CRITICAL finding(s) do not have rule_trace.`);
+      }
+      return issues;
+    }
+
+    function renderDashboard() {
+      const report = state.evidenceReport;
+      const quality = state.inputQualityReport;
+      const consistencyIssues = validateReportConsistency(report);
+
+      if (consistencyIssues.length > 0) {
+        showValidation("danger", consistencyIssues);
+        document.getElementById("dashboard").classList.add("hidden");
+        document.getElementById("exportButton").disabled = true;
+        return;
+      }
+
+      showValidation("ok", ["Loaded reports passed local dashboard consistency checks."]);
+
+      const summary = report.summary || {};
+      document.getElementById("dashboard").classList.remove("hidden");
+      document.getElementById("exportButton").disabled = false;
+
+      document.getElementById("findingsCount").textContent = valueOrDash(summary.findings_count);
+      document.getElementById("highCount").textContent = valueOrDash(summary.high_or_critical_findings_count);
+      document.getElementById("autonomousActions").textContent = valueOrDash(summary.autonomous_actions);
+
+      const qualityStatus = summary.input_quality_status || quality.status || "UNKNOWN";
+      const qualityStatusElement = document.getElementById("inputQualityStatus");
+      qualityStatusElement.innerHTML = `<span class="status-pill ${qualityStatus === "READY_WITH_WARNINGS" ? "status-warn" : "status-ok"}">${escapeHtml(qualityStatus)}</span>`;
+      document.getElementById("inputQualityNote").textContent = `Warnings: ${valueOrDash(summary.input_quality_warning_count ?? quality.summary?.warning_count)}. Errors: ${valueOrDash(summary.input_quality_error_count ?? quality.summary?.error_count)}.`;
+
+      renderTable("severityTable", summary.severity_distribution || {});
+      renderTable("signalFamilyTable", summary.signal_families || report.signal_families || {});
+      renderBoundary("zeroBoundaryList", report.zero_autonomy_boundary || {});
+      renderBoundary("interpretationBoundaryList", report.interpretation_boundary || {});
+      populateSignalFilter(summary.signal_families || report.signal_families || {});
+      renderReviewProgress();
+      renderReviewerNavigation();
+      renderReviewSummaryLayer();
+      renderInstitutionalHandoffReadiness();
+      renderFindings();
+    }
+
+    function renderTable(elementId, data) {
+      const rows = Object.entries(data)
+        .sort(([a], [b]) => a.localeCompare(b))
+        .map(([key, value]) => `<tr><td class="mono">${escapeHtml(key)}</td><td>${escapeHtml(String(value))}</td></tr>`)
+        .join("");
+      document.getElementById(elementId).innerHTML = `<thead><tr><th>Type</th><th>Count</th></tr></thead><tbody>${rows}</tbody>`;
+    }
+
+    function renderBoundary(elementId, data) {
+      const rows = Object.entries(data)
+        .map(([key, value]) => {
+          const statusClass = value === false || value === 0 ? "status-ok" : "status-warn";
+          return `<li><span class="mono">${escapeHtml(key)}</span><span class="status-pill ${statusClass}">${escapeHtml(String(value))}</span></li>`;
+        })
+        .join("");
+      document.getElementById(elementId).innerHTML = rows;
+    }
+
+    function populateSignalFilter(signalFamilies) {
+      const select = document.getElementById("signalFilter");
+      const current = select.value;
+      const options = [`<option value="ALL">All signal families</option>`]
+        .concat(Object.keys(signalFamilies).sort().map((signal) => `<option value="${escapeHtml(signal)}">${escapeHtml(signal)}</option>`));
+      select.innerHTML = options.join("");
+      if ([...select.options].some((option) => option.value === current)) {
+        select.value = current;
+      }
+    }
+
+    function renderFindings() {
+      const report = state.evidenceReport;
+      if (!report) return;
+
+      const findings = (report.findings || []).filter(matchesFilters).sort(sortFindingsForReview);
+      const list = document.getElementById("findingList");
+
+      if (findings.length === 0) {
+        list.innerHTML = `<div class="empty-state">No findings match the current filters.</div>`;
+        renderReviewProgress();
+        renderReviewerNavigation();
+        renderReviewSummaryLayer();
+        renderInstitutionalHandoffReadiness();
+        return;
+      }
+
+      list.innerHTML = findings.map(renderFindingCard).join("");
+      attachFindingExpansionHandlers();
+      attachReviewHandlers();
+      attachAttachmentReviewHandlers();
+      renderReviewProgress();
+      renderReviewerNavigation();
+      renderReviewSummaryLayer();
+      renderInstitutionalHandoffReadiness();
+    }
+
+    function sortFindingsForReview(a, b) {
+      const rank = { CRITICAL: 0, HIGH: 1, MEDIUM: 2, LOW: 3, INFO: 4 };
+      const aRank = rank[a.severity] ?? 5;
+      const bRank = rank[b.severity] ?? 5;
+      return aRank - bRank || String(a.id).localeCompare(String(b.id));
+    }
+
+    function matchesFilters(finding) {
+      const review = state.reviews[finding.id] || {};
+      const reviewState = review.action || "UNREVIEWED";
+      const search = state.filters.search;
+      const haystack = [
+        finding.id,
+        finding.title,
+        finding.severity,
+        finding.signal_family,
+        finding.expense_id,
+        finding.supplier_id,
+        finding.supplier_name,
+        finding.detected_signal,
+        finding.why_it_matters,
+        finding.reviewer_question,
+        finding.next_action,
+        finding.rule_trace?.source_rule_id,
+        finding.rule_trace?.source_rule_name,
+        finding.rule_trace?.source_rule_file,
+        finding.rule_trace?.human_readable_rule,
+        finding.normative_trace?.normative_trace_id,
+        finding.normative_trace?.trace_status,
+        finding.normative_trace?.jurisdiction,
+        finding.normative_trace?.reference_domain,
+        finding.normative_trace?.reference_confidence,
+        finding.normative_trace?.legal_interpretation_status,
+        finding.normative_trace?.responsible_review_layer,
+        finding.normative_trace?.verdict_boundary
+      ].join(" ").toLowerCase();
+
+      if (state.filters.severity !== "ALL" && finding.severity !== state.filters.severity) return false;
+      if (state.filters.signalFamily !== "ALL" && finding.signal_family !== state.filters.signalFamily) return false;
+      if (state.filters.reviewState !== "ALL" && reviewState !== state.filters.reviewState) return false;
+      if (search && !haystack.includes(search)) return false;
+      return true;
+    }
+
+    function renderFindingCard(finding) {
+      const review = state.reviews[finding.id] || {};
+      const action = review.action || "UNREVIEWED";
+      const note = review.note || "";
+      const ruleTrace = finding.rule_trace || null;
+      const normativeTrace = finding.normative_trace || null;
+      const evidenceAttachments = finding.evidence_attachments || [];
+      const evidenceAttachmentManifest = finding.evidence_attachment_manifest || null;
+      const severity = finding.severity || "INFO";
+      const signalFamily = finding.signal_family || "N/A";
+      const supplier = finding.supplier_name || finding.supplier_id || "N/A";
+      const expenseId = finding.expense_id || "N/A";
+      const isPriority = severity === "HIGH" || severity === "CRITICAL";
+      const isOpen = state.expandedFindingIds.has(finding.id);
+
+      return `
+        <article class="finding-card ${isPriority ? "priority-finding" : ""}" data-finding-id="${escapeHtml(finding.id)}">
+          <details class="finding-details" ${isOpen ? "open" : ""}>
+            <summary class="finding-summary" aria-label="Open finding ${escapeHtml(finding.id)}">
+              <div class="finding-summary-header">
+                <div class="finding-summary-main">
+                  <div class="finding-summary-title-row">
+                    <span class="severity-pill severity-${escapeHtml(severity)}">${escapeHtml(severity)}</span>
+                    <span class="mono">${escapeHtml(finding.id)}</span>
+                    <span class="finding-summary-title">${escapeHtml(finding.title || finding.id)}</span>
+                  </div>
+                  <div class="finding-summary-meta">
+                    <span>Supplier: ${escapeHtml(supplier)}</span>
+                    <span>Expense: <span class="mono">${escapeHtml(expenseId)}</span></span>
+                    <span>Signal: <span class="mono">${escapeHtml(signalFamily)}</span></span>
+                  </div>
+                </div>
+                <div class="finding-summary-actions">
+                  <span class="action-pill">${escapeHtml(action)}</span>
+                  <span class="finding-expand-indicator"></span>
+                </div>
+              </div>
+            </summary>
+
+            <div class="finding-body">
+              <section>
+                <h3>Core review summary</h3>
+                <div class="detail-grid">
+                  <div class="detail-box"><strong>Detected signal</strong>${escapeHtml(finding.detected_signal || "")}</div>
+                  <div class="detail-box"><strong>Why it matters</strong>${escapeHtml(finding.why_it_matters || "")}</div>
+                  <div class="detail-box"><strong>Reviewer question</strong>${escapeHtml(finding.reviewer_question || "")}</div>
+                  <div class="detail-box"><strong>Next action</strong>${escapeHtml(finding.next_action || "")}</div>
+                </div>
+              </section>
+
+              <div class="review-box">
+                <h3>Human review action</h3>
+                <div class="review-row">
+                  <select class="review-action" data-finding-id="${escapeHtml(finding.id)}">${reviewActionOptions(action)}</select>
+                  <textarea class="review-note" data-finding-id="${escapeHtml(finding.id)}" placeholder="Reviewer note. Example: documentation requested from project manager.">${escapeHtml(note)}</textarea>
+                  <button class="save-review" data-finding-id="${escapeHtml(finding.id)}" type="button">Save</button>
+                </div>
+              </div>
+
+              ${renderRuleTrace(ruleTrace)}
+              ${renderNormativeTrace(normativeTrace)}
+              ${renderEvidenceAttachments(evidenceAttachments)}
+              ${renderEvidenceAttachmentManifest(evidenceAttachmentManifest)}
+            </div>
+          </details>
+        </article>
+      `;
+    }
+
+    function attachFindingExpansionHandlers() {
+      document.querySelectorAll(".finding-card details.finding-details").forEach((details) => {
+        details.addEventListener("toggle", () => {
+          const card = details.closest(".finding-card");
+          if (!card) return;
+          const findingId = card.dataset.findingId;
+          if (details.open) state.expandedFindingIds.add(findingId);
+          else state.expandedFindingIds.delete(findingId);
+        });
+      });
+    }
+
+    function renderRuleTrace(ruleTrace) {
+      if (!ruleTrace) {
+        return `
+          <details class="section-details">
+            <summary>Rule trace</summary>
+            <div class="section-details-body">
+              <p class="small">No rule_trace present. This should not occur for HIGH or CRITICAL findings after Rule Traceability Layer validation.</p>
+            </div>
+          </details>
+        `;
+      }
+      return `
+        <details class="section-details">
+          <summary>Rule trace</summary>
+          <div class="section-details-body">
+            <div class="detail-grid">
+              <div class="detail-box"><strong>Rule ID</strong><code>${escapeHtml(ruleTrace.source_rule_id || "")}</code></div>
+              <div class="detail-box"><strong>Protocol file</strong><code>${escapeHtml(ruleTrace.source_rule_file || "")}</code></div>
+              <div class="detail-box"><strong>Protocol reference</strong><code>${escapeHtml(ruleTrace.protocol_reference || "")}</code></div>
+              <div class="detail-box"><strong>Rule name</strong>${escapeHtml(ruleTrace.source_rule_name || "")}</div>
+            </div>
+            <div class="boundary-note">
+              <strong>Human-readable rule</strong>
+              <p>${escapeHtml(ruleTrace.human_readable_rule || "")}</p>
+              <strong>Verdict boundary</strong>
+              <p class="small">${escapeHtml(ruleTrace.verdict_boundary || "")}</p>
+            </div>
+          </div>
+        </details>
+      `;
+    }
+
+    function renderNormativeTrace(normativeTrace) {
+      if (!normativeTrace || typeof normativeTrace !== "object") {
+        return `
+          <details class="section-details">
+            <summary>Potential normative references</summary>
+            <div class="section-details-body">
+              <p class="placeholder-empty">No normative_trace placeholder is attached to this finding.</p>
+              <div class="boundary-note small">This dashboard does not provide legal interpretation, legal verdicts, enforcement decisions, payment blocking, supplier sanctions, production mutations, registry mutations, signing actions, key access, or external execution.</div>
+            </div>
+          </details>
+        `;
+      }
+
+      const references = getNormativePlaceholderReferences(normativeTrace);
+      const referenceHtml = renderNormativePlaceholderReferences(references);
+
+      return `
+        <details class="section-details">
+          <summary>Potential normative references</summary>
+          <div class="section-details-body">
+            <div class="detail-grid">
+              <div class="detail-box"><strong>normative_trace_id</strong><code>${displayOrPlaceholder(normativeTrace.normative_trace_id)}</code></div>
+              <div class="detail-box"><strong>trace_status</strong><code>${displayOrPlaceholder(normativeTrace.trace_status)}</code></div>
+              <div class="detail-box"><strong>jurisdiction</strong><code>${displayOrPlaceholder(normativeTrace.jurisdiction)}</code></div>
+              <div class="detail-box"><strong>reference_domain</strong><code>${displayOrPlaceholder(normativeTrace.reference_domain)}</code></div>
+              <div class="detail-box"><strong>reference_confidence</strong><code>${displayOrPlaceholder(normativeTrace.reference_confidence)}</code></div>
+              <div class="detail-box"><strong>legal_interpretation_status</strong><code>${displayOrPlaceholder(normativeTrace.legal_interpretation_status)}</code></div>
+              <div class="detail-box"><strong>institutional_review_required</strong><code>${displayBooleanOrPlaceholder(normativeTrace.institutional_review_required)}</code></div>
+              <div class="detail-box"><strong>responsible_review_layer</strong><code>${displayOrPlaceholder(normativeTrace.responsible_review_layer)}</code></div>
+            </div>
+            <div class="boundary-note"><strong>Placeholder references</strong>${referenceHtml}</div>
+            <div class="boundary-note"><strong>verdict_boundary</strong><p class="small">${displayOrPlaceholder(normativeTrace.verdict_boundary, "No legal verdict. Human institutional review is required before any interpretation or action.")}</p></div>
+          </div>
+        </details>
+      `;
+    }
+
+    function renderEvidenceAttachments(attachments) {
+      if (!Array.isArray(attachments) || attachments.length === 0) {
+        return `
+          <details class="section-details">
+            <summary>Evidence attachments</summary>
+            <div class="section-details-body">
+              <p class="placeholder-empty">No evidence attachment references are attached to this finding.</p>
+              <div class="attachment-boundary small">This section displays local document references only. It does not read files, verify documents, interpret legal meaning, issue compliance conclusions, block payments, sanction suppliers, mutate production data, sign records, access keys, or execute external actions.</div>
+            </div>
+          </details>
+        `;
+      }
+
+      return `
+        <details class="section-details">
+          <summary>Evidence attachments</summary>
+          <div class="section-details-body">
+            <div class="attachment-list">
+              ${attachments.map(renderAttachmentItem).join("")}
+            </div>
+            <div class="attachment-boundary small">Evidence attachments are local reference placeholders only. The dashboard does not open, parse, validate, OCR, summarize, sign, or transmit attached documents. Human institutional review remains required.</div>
+          </div>
+        </details>
+      `;
+    }
+
+    function renderAttachmentItem(attachment) {
+      if (!attachment || typeof attachment !== "object") {
+        return `<div class="attachment-item">${displayOrPlaceholder(attachment, "Invalid attachment placeholder")}</div>`;
+      }
+
+      const attachmentId = attachment.attachment_id || "Not provided";
+      const localReview = state.attachmentReviews[attachmentId] || {};
+      const localReviewAction = localReview.action || "NOT_REVIEWED";
+      const localReviewNote = localReview.note || "";
+
+      return `
+        <div class="attachment-item">
+          <strong>${displayOrPlaceholder(attachment.file_name, "Unnamed local document reference")}</strong>
+          <div class="attachment-meta">
+            <div>Attachment ID: <code>${displayOrPlaceholder(attachmentId)}</code></div>
+            <div>Type: <code>${displayOrPlaceholder(attachment.attachment_type)}</code></div>
+            <div>Status: <code>${displayOrPlaceholder(attachment.document_status)}</code></div>
+            <div>Source review status: <code>${displayOrPlaceholder(attachment.review_status)}</code></div>
+            <div>Local document review state: <code>${displayOrPlaceholder(localReviewAction)}</code></div>
+            <div>Human access required: <code>${displayBooleanOrPlaceholder(attachment.human_access_required)}</code></div>
+            <div>Reference: <code>${displayOrPlaceholder(attachment.document_reference)}</code></div>
+          </div>
+          <div class="attachment-review-box">
+            <strong>Document review action</strong>
+            <div class="review-row">
+              <select class="attachment-review-action" data-attachment-id="${escapeHtml(attachmentId)}">${attachmentReviewActionOptions(localReviewAction)}</select>
+              <textarea class="attachment-review-note" data-attachment-id="${escapeHtml(attachmentId)}" placeholder="Document review note. Example: invoice checked against amount and supplier.">${escapeHtml(localReviewNote)}</textarea>
+              <button class="save-attachment-review" data-attachment-id="${escapeHtml(attachmentId)}" type="button">Save document review</button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function renderEvidenceAttachmentManifest(manifest) {
+      if (!manifest || typeof manifest !== "object") {
+        return `
+          <details class="section-details">
+            <summary>Evidence attachment manifest</summary>
+            <div class="section-details-body"><p class="placeholder-empty">No evidence attachment manifest is attached to this finding.</p></div>
+          </details>
+        `;
+      }
+
+      const expectedDocuments = Array.isArray(manifest.expected_documents) ? manifest.expected_documents : [];
+
+      return `
+        <details class="section-details">
+          <summary>Evidence attachment manifest</summary>
+          <div class="section-details-body">
+            <div class="detail-grid">
+              <div class="detail-box"><strong>manifest_id</strong><code>${displayOrPlaceholder(manifest.manifest_id)}</code></div>
+              <div class="detail-box"><strong>manifest_status</strong><code>${displayOrPlaceholder(manifest.manifest_status)}</code></div>
+              <div class="detail-box"><strong>human_review_required</strong><code>${displayBooleanOrPlaceholder(manifest.human_review_required)}</code></div>
+              <div class="detail-box"><strong>expected_document_count</strong><code>${escapeHtml(String(expectedDocuments.length))}</code></div>
+            </div>
+            ${expectedDocuments.length === 0 ? `<p class="placeholder-empty">No expected document placeholders were defined.</p>` : `<div class="manifest-list">${expectedDocuments.map(renderManifestDocument).join("")}</div>`}
+            <div class="manifest-boundary small">${displayOrPlaceholder(manifest.manifest_boundary, "Evidence attachment manifests are structural review layers only. The dashboard does not validate authenticity, parse documents, perform OCR, interpret legal meaning, issue compliance conclusions, sign records, access keys, mutate production systems, or execute external actions.")}</div>
+          </div>
+        </details>
+      `;
+    }
+
+    function renderManifestDocument(document) {
+      return `
+        <div class="manifest-item">
+          <strong>${displayOrPlaceholder(document.document_type, "Unnamed expected document")}</strong>
+          <div class="manifest-meta">
+            <div>Attachment ID: <code>${displayOrPlaceholder(document.attachment_id)}</code></div>
+            <div>Required: <code>${displayBooleanOrPlaceholder(document.required)}</code></div>
+            <div>Present: <code>${displayBooleanOrPlaceholder(document.present)}</code></div>
+            <div>Review status: <code>${displayOrPlaceholder(document.review_status)}</code></div>
+            <div>Reference: <code>${displayOrPlaceholder(document.document_reference)}</code></div>
+            <div>Reviewer question: ${displayOrPlaceholder(document.expected_review_question)}</div>
+          </div>
+        </div>
+      `;
+    }
+
+    function getNormativePlaceholderReferences(normativeTrace) {
+      const candidateKeys = ["placeholder_references", "potential_references", "normative_references", "references", "legal_references"];
+      for (const key of candidateKeys) {
+        if (Array.isArray(normativeTrace[key])) return normativeTrace[key];
+      }
+      return [];
+    }
+
+    function renderNormativePlaceholderReferences(references) {
+      if (!Array.isArray(references) || references.length === 0) {
+        return `<p class="placeholder-empty">No legal citations are attached. Placeholder references are intentionally empty until verified sources are supplied by human legal or institutional review.</p>`;
+      }
+
+      return `<ol class="normative-reference-list">${references.map((reference) => {
+        if (!reference || typeof reference !== "object") {
+          return `<li>${displayOrPlaceholder(reference, "Empty placeholder reference")}</li>`;
+        }
+        const label = reference.label || reference.reference_label || reference.name || reference.title || reference.id;
+        const source = reference.source || reference.reference_source || reference.source_hint || reference.file || reference.url;
+        const status = reference.status || reference.reference_status || reference.trace_status || "Placeholder only";
+        const confidence = reference.confidence || reference.reference_confidence;
+        return `<li><strong>${displayOrPlaceholder(label, "Unnamed placeholder reference")}</strong><br>Source: ${displayOrPlaceholder(source, "No verified source provided")}<br>Status: ${displayOrPlaceholder(status, "Placeholder only")}${confidence ? `<br>Confidence: ${displayOrPlaceholder(confidence)}` : ""}</li>`;
+      }).join("")}</ol>`;
+    }
+
+    function attachmentReviewActionOptions(selected) {
+      const options = [
+        ["NOT_REVIEWED", "Not reviewed"],
+        ["REVIEWED", "Reviewed"],
+        ["MISSING", "Missing"],
+        ["NEEDS_REPLACEMENT", "Needs replacement"],
+        ["REQUIRES_ESCALATION", "Requires escalation"]
+      ];
+      return options.map(([value, label]) => `<option value="${value}" ${value === selected ? "selected" : ""}>${label}</option>`).join("");
+    }
+
+    function reviewActionOptions(selected) {
+      const options = [
+        ["UNREVIEWED", "Unreviewed"],
+        ["ACCEPTED_AS_JUSTIFIED", "Accept as justified"],
+        ["ESCALATE_FOR_REVIEW", "Escalate for review"],
+        ["MARK_FALSE_POSITIVE", "Mark false positive"],
+        ["NEEDS_MORE_EVIDENCE", "Needs more evidence"]
+      ];
+      return options.map(([value, label]) => `<option value="${value}" ${value === selected ? "selected" : ""}>${label}</option>`).join("");
+    }
+
+    function attachAttachmentReviewHandlers() {
+      document.querySelectorAll(".save-attachment-review").forEach((button) => {
+        button.addEventListener("click", () => {
+          const attachmentId = button.dataset.attachmentId;
+          const action = document.querySelector(`.attachment-review-action[data-attachment-id="${cssEscape(attachmentId)}"]`).value;
+          const note = document.querySelector(`.attachment-review-note[data-attachment-id="${cssEscape(attachmentId)}"]`).value.trim();
+
+          if (action === "NOT_REVIEWED" && !note) {
+            delete state.attachmentReviews[attachmentId];
+          } else {
+            state.attachmentReviews[attachmentId] = {
+              attachment_id: attachmentId,
+              action,
+              note,
+              reviewed_at: new Date().toISOString(),
+              reviewer_mode: "LOCAL_BROWSER_DOCUMENT_REVIEW"
+            };
+          }
+
+          saveAttachmentReviews();
+          renderFindings();
+        });
+      });
+    }
+
+    function attachReviewHandlers() {
+      document.querySelectorAll(".save-review").forEach((button) => {
+        button.addEventListener("click", () => {
+          const findingId = button.dataset.findingId;
+          const action = document.querySelector(`.review-action[data-finding-id="${cssEscape(findingId)}"]`).value;
+          const note = document.querySelector(`.review-note[data-finding-id="${cssEscape(findingId)}"]`).value.trim();
+          if (action === "UNREVIEWED") {
+            delete state.reviews[findingId];
+          } else {
+            state.reviews[findingId] = {
+              finding_id: findingId,
+              action,
+              note,
+              reviewed_at: new Date().toISOString(),
+              reviewer_mode: "LOCAL_BROWSER_REVIEW"
+            };
+          }
+          saveReviews();
+          renderFindings();
+        });
+      });
+    }
+
+    function getReviewState(finding) {
+      const review = state.reviews[finding.id] || {};
+      return review.action || "UNREVIEWED";
+    }
+
+    function isHighOrCritical(finding) {
+      return finding.severity === "HIGH" || finding.severity === "CRITICAL";
+    }
+
+    function isUnresolvedReviewState(action) {
+      return action === "UNREVIEWED";
+    }
+
+    function renderReviewerNavigation() {
+      const report = state.evidenceReport;
+      if (!report) return;
+
+      const findings = Array.isArray(report.findings) ? report.findings : [];
+      const metrics = computeReviewWorkflowMetrics();
+      const attachmentMetrics = metrics.attachmentMetrics || computeAttachmentReviewMetrics(findings);
+      const attachmentBlockers = attachmentMetrics.unreviewedRequiredAttachments.length + attachmentMetrics.missingRequiredAttachments.length + attachmentMetrics.escalatedAttachments.length + attachmentMetrics.needsReplacementAttachments.length;
+
+      setText("navAllFindings", findings.length);
+      setText("navReviewedFindings", metrics.reviewed.length);
+      setText("navUnreviewedFindings", metrics.unresolved.length);
+      setText("navUnreviewedHighFindings", metrics.unresolvedHigh.length);
+      setText("navEscalatedFindings", metrics.escalated.length);
+      setText("navNeedsEvidenceFindings", metrics.needsEvidence.length);
+      setText("navAttachmentBlockers", attachmentBlockers);
+
+      const list = document.getElementById("reviewerNavigationList");
+      if (!list) return;
+
+      const ordered = findings.slice().sort(sortFindingsForReview);
+
+      if (ordered.length === 0) {
+        list.innerHTML = `<div class="empty-state">No findings are available in the loaded report.</div>`;
+        return;
+      }
+
+      list.innerHTML = ordered.map((finding) => {
+        const action = getReviewState(finding);
+        const severity = finding.severity || "INFO";
+        const signalFamily = finding.signal_family || "N/A";
+        return `
+          <button class="reviewer-navigation-item" type="button" data-target-finding-id="${escapeHtml(finding.id)}">
+            <span class="reviewer-navigation-title">
+              <span class="severity-pill severity-${escapeHtml(severity)}">${escapeHtml(severity)}</span>
+              <span class="mono">${escapeHtml(finding.id || "")}</span>
+              <span class="action-pill">${escapeHtml(action)}</span>
+            </span>
+            <span class="reviewer-navigation-meta">${escapeHtml(signalFamily)} · ${escapeHtml(finding.supplier_name || finding.supplier_id || "N/A")}</span>
+          </button>
+        `;
+      }).join("");
+
+      list.querySelectorAll(".reviewer-navigation-item").forEach((button) => {
+        button.addEventListener("click", () => {
+          const findingId = button.dataset.targetFindingId;
+          const target = document.querySelector(`.finding-card[data-finding-id="${cssEscape(findingId)}"]`);
+          if (!target) return;
+
+          document.querySelectorAll(".finding-card.navigation-highlight").forEach((element) => element.classList.remove("navigation-highlight"));
+          const details = target.querySelector("details.finding-details");
+          if (details) {
+            details.open = true;
+            state.expandedFindingIds.add(findingId);
+          }
+          target.classList.add("navigation-highlight");
+          target.scrollIntoView({ behavior: "smooth", block: "start" });
+          window.setTimeout(() => target.classList.remove("navigation-highlight"), 2200);
+        });
+      });
+    }
+
+    function renderReviewSummaryLayer() {
+      const report = state.evidenceReport;
+      if (!report) return;
+
+      const findings = Array.isArray(report.findings) ? report.findings : [];
+      const unresolved = findings.filter((finding) => isUnresolvedReviewState(getReviewState(finding)));
+      const unresolvedHigh = unresolved.filter(isHighOrCritical);
+      const escalated = findings.filter((finding) => getReviewState(finding) === "ESCALATE_FOR_REVIEW");
+      const needsEvidence = findings.filter((finding) => getReviewState(finding) === "NEEDS_MORE_EVIDENCE");
+      const reviewed = findings.filter((finding) => getReviewState(finding) !== "UNREVIEWED");
+
+      setText("summaryUnresolvedCount", unresolved.length);
+      setText("summaryUnresolvedHighCount", unresolvedHigh.length);
+      setText("summaryEscalatedCount", escalated.length);
+      setText("summaryNeedsEvidenceCount", needsEvidence.length);
+      setText("summaryUnresolvedNote", `${reviewed.length} reviewed locally. ${unresolved.length} still require human attention.`);
+
+      renderFindingQueueTable("escalationQueueTable", escalated, ["finding", "severity", "supplier", "layer", "note"]);
+      setText("escalationQueueNote", escalated.length === 0 ? "No finding has been marked ESCALATE_FOR_REVIEW in localStorage yet." : `${escalated.length} finding(s) are marked for institutional escalation.`);
+
+      renderFindingQueueTable("missingEvidenceQueueTable", needsEvidence, ["finding", "severity", "supplier", "signal", "note"]);
+      setText("missingEvidenceQueueNote", needsEvidence.length === 0 ? "No finding has been marked NEEDS_MORE_EVIDENCE in localStorage yet." : `${needsEvidence.length} finding(s) require additional evidence before closure.`);
+
+      renderSupplierConcentration(findings);
+      renderDeadlineQueue(findings);
+      renderExportReadiness(findings, unresolvedHigh, escalated, needsEvidence, reviewed);
+    }
+
+    function computeReviewWorkflowMetrics() {
+      const report = state.evidenceReport;
+      const findings = report && Array.isArray(report.findings) ? report.findings : [];
+      const reviewed = findings.filter((finding) => getReviewState(finding) !== "UNREVIEWED");
+      const unresolved = findings.filter((finding) => getReviewState(finding) === "UNREVIEWED");
+      const unresolvedHigh = unresolved.filter(isHighOrCritical);
+      const escalated = findings.filter((finding) => getReviewState(finding) === "ESCALATE_FOR_REVIEW");
+      const needsEvidence = findings.filter((finding) => getReviewState(finding) === "NEEDS_MORE_EVIDENCE");
+      const accepted = findings.filter((finding) => getReviewState(finding) === "ACCEPTED_AS_JUSTIFIED");
+      const falsePositive = findings.filter((finding) => getReviewState(finding) === "MARK_FALSE_POSITIVE");
+      const reviewedWithoutNotes = findings.filter((finding) => {
+        const review = state.reviews[finding.id];
+        return review && review.action && review.action !== "UNREVIEWED" && !review.note;
+      });
+      return {
+        findings,
+        reviewed,
+        unresolved,
+        unresolvedHigh,
+        escalated,
+        needsEvidence,
+        accepted,
+        falsePositive,
+        reviewedWithoutNotes,
+        attachmentMetrics: computeAttachmentReviewMetrics(findings)
+      };
+    }
+
+    function computeAttachmentReviewMetrics(findings) {
+      const requiredAttachments = [];
+      const reviewedAttachments = [];
+      const unreviewedRequiredAttachments = [];
+      const missingRequiredAttachments = [];
+      const escalatedAttachments = [];
+      const needsReplacementAttachments = [];
+
+      findings.forEach((finding) => {
+        const attachments = Array.isArray(finding.evidence_attachments) ? finding.evidence_attachments : [];
+        attachments.forEach((attachment) => {
+          if (!attachment || typeof attachment !== "object") return;
+          const attachmentId = attachment.attachment_id;
+          const localReview = state.attachmentReviews[attachmentId] || null;
+          const localAction = localReview ? localReview.action : "NOT_REVIEWED";
+          const isRequired = attachment.human_access_required === true;
+
+          const enrichedAttachment = {
+            finding_id: finding.id,
+            finding_title: finding.title,
+            finding_severity: finding.severity,
+            attachment_id: attachmentId,
+            attachment_type: attachment.attachment_type || "Not provided",
+            file_name: attachment.file_name || "Not provided",
+            document_reference: attachment.document_reference || "Not provided",
+            required: isRequired,
+            source_review_status: attachment.review_status || "Not provided",
+            local_document_review_state: localAction,
+            local_document_review: localReview
+          };
+
+          if (isRequired) requiredAttachments.push(enrichedAttachment);
+          if (localAction !== "NOT_REVIEWED") reviewedAttachments.push(enrichedAttachment);
+          if (isRequired && localAction === "NOT_REVIEWED") unreviewedRequiredAttachments.push(enrichedAttachment);
+          if (isRequired && localAction === "MISSING") missingRequiredAttachments.push(enrichedAttachment);
+          if (localAction === "REQUIRES_ESCALATION") escalatedAttachments.push(enrichedAttachment);
+          if (localAction === "NEEDS_REPLACEMENT") needsReplacementAttachments.push(enrichedAttachment);
+        });
+      });
+
+      return { requiredAttachments, reviewedAttachments, unreviewedRequiredAttachments, missingRequiredAttachments, escalatedAttachments, needsReplacementAttachments };
+    }
+
+    function renderInstitutionalHandoffReadiness() {
+      const panel = document.getElementById("institutionalHandoffReadinessPanel");
+      if (!panel || !state.evidenceReport) return;
+
+      const metrics = computeReviewWorkflowMetrics();
+      const total = metrics.findings.length;
+      const reviewedCount = metrics.reviewed.length;
+      const reviewedRatio = total === 0 ? 0 : Math.round((reviewedCount / total) * 100);
+      const attachmentMetrics = metrics.attachmentMetrics || computeAttachmentReviewMetrics(metrics.findings);
+      const unreviewedRequiredAttachmentCount = attachmentMetrics.unreviewedRequiredAttachments.length;
+      const missingRequiredAttachmentCount = attachmentMetrics.missingRequiredAttachments.length;
+      const escalatedAttachmentCount = attachmentMetrics.escalatedAttachments.length;
+      const needsReplacementAttachmentCount = attachmentMetrics.needsReplacementAttachments.length;
+
+      let handoffState = "ADVISORY_NOT_READY_FOR_HANDOFF";
+      let stateClass = "handoff-state-blocked";
+      let readinessTone = "Review blockers remain";
+
+      if (metrics.unresolvedHigh.length === 0 && metrics.needsEvidence.length === 0 && metrics.reviewedWithoutNotes.length === 0 && unreviewedRequiredAttachmentCount === 0 && missingRequiredAttachmentCount === 0 && escalatedAttachmentCount === 0 && needsReplacementAttachmentCount === 0) {
+        if (metrics.escalated.length === 0) {
+          handoffState = "ADVISORY_READY_FOR_INTERNAL_REVIEW_PACKAGE";
+          stateClass = "handoff-state-ready";
+          readinessTone = "No local blocking condition detected";
+        } else {
+          handoffState = "ADVISORY_PARTIAL_HANDOFF_REVIEW_REQUIRED";
+          stateClass = "handoff-state-review";
+          readinessTone = "Escalation remains active";
+        }
+      }
+
+      let recommendation = "CONTINUE_REVIEW";
+      if (metrics.needsEvidence.length > 0 || missingRequiredAttachmentCount > 0 || needsReplacementAttachmentCount > 0) recommendation = "REQUEST_EVIDENCE";
+      else if (unreviewedRequiredAttachmentCount > 0) recommendation = "CONTINUE_ATTACHMENT_REVIEW";
+      else if (metrics.unresolvedHigh.length > 0) recommendation = "CONTINUE_HIGH_PRIORITY_REVIEW";
+      else if (escalatedAttachmentCount > 0 || metrics.escalated.length > 0) recommendation = "ESCALATE_TO_MANAGEMENT";
+      else if (metrics.reviewedWithoutNotes.length > 0) recommendation = "COMPLETE_REVIEW_NOTES";
+      else if (handoffState === "ADVISORY_READY_FOR_INTERNAL_REVIEW_PACKAGE") recommendation = "PREPARE_FOR_INTERNAL_HANDOFF";
+
+      const blockers = [];
+      if (metrics.unresolvedHigh.length > 0) blockers.push(`${metrics.unresolvedHigh.length} unresolved HIGH / CRITICAL finding(s) remain.`);
+      if (metrics.needsEvidence.length > 0) blockers.push(`${metrics.needsEvidence.length} evidence request(s) remain active.`);
+      if (metrics.escalated.length > 0) blockers.push(`${metrics.escalated.length} escalation review item(s) remain active.`);
+      if (metrics.reviewedWithoutNotes.length > 0) blockers.push(`${metrics.reviewedWithoutNotes.length} reviewed finding(s) have no reviewer note.`);
+      if (reviewedCount === 0) blockers.push("No local human review actions have been saved yet.");
+      if (unreviewedRequiredAttachmentCount > 0) blockers.push(`${unreviewedRequiredAttachmentCount} required attachment review(s) remain unreviewed.`);
+      if (missingRequiredAttachmentCount > 0) blockers.push(`${missingRequiredAttachmentCount} required attachment(s) are marked missing.`);
+      if (escalatedAttachmentCount > 0) blockers.push(`${escalatedAttachmentCount} attachment review item(s) require escalation.`);
+      if (needsReplacementAttachmentCount > 0) blockers.push(`${needsReplacementAttachmentCount} attachment review item(s) need replacement.`);
+
+      const blockerHtml = blockers.length ? `<ul class="handoff-blocker-list">${blockers.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>` : `<p class="small">No local blocking condition is currently detected. Institutional approval still remains a human responsibility.</p>`;
+
+      panel.innerHTML = `
+        <div class="handoff-state-row">
+          <span class="handoff-state-pill ${stateClass}">${escapeHtml(handoffState)}</span>
+          <span class="status-pill status-warn">${escapeHtml(recommendation)}</span>
+          <span class="small">${escapeHtml(readinessTone)}</span>
+        </div>
+        <div class="summary-card-grid">
+          <div class="summary-card"><strong>Reviewed ratio</strong><span>${escapeHtml(String(reviewedRatio))}%</span><p class="queue-note">${escapeHtml(String(reviewedCount))} / ${escapeHtml(String(total))} findings reviewed locally</p></div>
+          <div class="summary-card"><strong>Unresolved HIGH / CRITICAL</strong><span>${escapeHtml(String(metrics.unresolvedHigh.length))}</span><p class="queue-note">Blocking condition for handoff readiness</p></div>
+          <div class="summary-card"><strong>Active escalation</strong><span>${escapeHtml(String(metrics.escalated.length))}</span><p class="queue-note">Requires institutional review layer</p></div>
+          <div class="summary-card"><strong>Evidence requests</strong><span>${escapeHtml(String(metrics.needsEvidence.length))}</span><p class="queue-note">Must be resolved or explicitly carried forward</p></div>
+        </div>
+        <div class="queue-grid">
+          <div class="queue-panel"><h3>Blocking conditions</h3>${blockerHtml}</div>
+          <div class="queue-panel"><h3>Institutional review recommendation</h3><p><span class="status-pill status-warn">${escapeHtml(recommendation)}</span></p><p class="small">This recommendation is advisory and derived only from local reviewer states. It does not approve, reject, submit, pay, sanction, mutate, sign, or execute anything.</p></div>
+        </div>
+        <div class="handoff-guidance-box"><strong>Boundary:</strong> This panel provides local advisory readiness guidance only. It does not authorize donor submission, legal approval, compliance conclusion, payment execution, supplier action, production mutation, canonical registry mutation, signing, key access, or external execution.</div>
+      `;
+    }
+
+    function renderFindingQueueTable(elementId, findings, columns) {
+      const table = document.getElementById(elementId);
+      if (!table) return;
+      if (!findings.length) {
+        table.innerHTML = `<tbody><tr><td class="small">No local review items in this queue.</td></tr></tbody>`;
+        return;
+      }
+
+      const headers = columns.map((column) => `<th>${escapeHtml(column)}</th>`).join("");
+      const rows = findings.map((finding) => {
+        const review = state.reviews[finding.id] || {};
+        const layer = finding.normative_trace?.responsible_review_layer || "Not provided";
+        const values = {
+          finding: `<span class="mono">${escapeHtml(finding.id || "")}</span><br><span class="small">${escapeHtml(finding.title || "")}</span>`,
+          severity: `<span class="severity-pill severity-${escapeHtml(finding.severity || "INFO")}">${escapeHtml(finding.severity || "UNKNOWN")}</span>`,
+          supplier: escapeHtml(finding.supplier_name || finding.supplier_id || "N/A"),
+          layer: `<span class="mono">${escapeHtml(layer)}</span>`,
+          signal: `<span class="mono">${escapeHtml(finding.signal_family || "")}</span>`,
+          note: escapeHtml(truncateText(review.note || "No reviewer note saved.", 120))
+        };
+        return `<tr>${columns.map((column) => `<td>${values[column] || ""}</td>`).join("")}</tr>`;
+      }).join("");
+      table.innerHTML = `<thead><tr>${headers}</tr></thead><tbody>${rows}</tbody>`;
+    }
+
+    function renderSupplierConcentration(findings) {
+      const table = document.getElementById("supplierConcentrationTable");
+      if (!table) return;
+      const grouped = new Map();
+      findings.forEach((finding) => {
+        const supplier = finding.supplier_name || finding.supplier_id || "N/A";
+        if (!grouped.has(supplier)) grouped.set(supplier, { supplier, total: 0, high: 0, families: new Set() });
+        const item = grouped.get(supplier);
+        item.total += 1;
+        if (isHighOrCritical(finding)) item.high += 1;
+        if (finding.signal_family) item.families.add(finding.signal_family);
+      });
+
+      const rows = [...grouped.values()].filter((item) => item.total > 1).sort((a, b) => b.high - a.high || b.total - a.total || a.supplier.localeCompare(b.supplier));
+
+      if (!rows.length) {
+        table.innerHTML = `<tbody><tr><td class="small">No supplier appears in multiple findings.</td></tr></tbody>`;
+        setText("supplierConcentrationNote", "Supplier concentration summary is informational only and does not imply misconduct.");
+        return;
+      }
+
+      table.innerHTML = `<thead><tr><th>Supplier</th><th>Total</th><th>HIGH</th><th>Signal families</th></tr></thead><tbody>${rows.map((item) => `<tr><td>${escapeHtml(item.supplier)}</td><td>${escapeHtml(String(item.total))}</td><td>${escapeHtml(String(item.high))}</td><td class="mono">${escapeHtml([...item.families].sort().join(", "))}</td></tr>`).join("")}</tbody>`;
+      setText("supplierConcentrationNote", `${rows.length} supplier(s) appear in more than one finding. This is a review navigation signal only.`);
+    }
+
+    function renderDeadlineQueue(findings) {
+      const table = document.getElementById("deadlineQueueTable");
+      if (!table) return;
+      const deadlineFindings = findings.filter((finding) => finding.signal_family === "deadline_sensitive_expense").sort(sortFindingsForReview);
+
+      if (!deadlineFindings.length) {
+        table.innerHTML = `<tbody><tr><td class="small">No deadline-sensitive findings are present.</td></tr></tbody>`;
+        setText("deadlineQueueNote", "No reporting-period timing queue is currently required.");
+        return;
+      }
+
+      table.innerHTML = `<thead><tr><th>Finding</th><th>Severity</th><th>Expense</th><th>Review state</th></tr></thead><tbody>${deadlineFindings.map((finding) => `<tr><td><span class="mono">${escapeHtml(finding.id || "")}</span><br><span class="small">${escapeHtml(truncateText(finding.detected_signal || "", 100))}</span></td><td><span class="severity-pill severity-${escapeHtml(finding.severity || "INFO")}">${escapeHtml(finding.severity || "UNKNOWN")}</span></td><td class="mono">${escapeHtml(finding.expense_id || "N/A")}</td><td><span class="action-pill">${escapeHtml(getReviewState(finding))}</span></td></tr>`).join("")}</tbody>`;
+      setText("deadlineQueueNote", `${deadlineFindings.length} deadline-sensitive finding(s) require timing and documentation review.`);
+    }
+
+    function renderExportReadiness(findings, unresolvedHigh, escalated, needsEvidence, reviewed) {
+      const box = document.getElementById("exportReadinessBox");
+      if (!box) return;
+      const reviewedWithoutNotes = findings.filter((finding) => {
+        const review = state.reviews[finding.id];
+        return review && review.action && review.action !== "UNREVIEWED" && !review.note;
+      });
+      const attachmentMetrics = computeAttachmentReviewMetrics(findings);
+      const attachmentBlockerCount = attachmentMetrics.unreviewedRequiredAttachments.length + attachmentMetrics.missingRequiredAttachments.length + attachmentMetrics.escalatedAttachments.length + attachmentMetrics.needsReplacementAttachments.length;
+      const statusClass = unresolvedHigh.length === 0 && reviewedWithoutNotes.length === 0 && attachmentBlockerCount === 0 ? "status-ok" : "status-warn";
+      const statusText = unresolvedHigh.length === 0 && reviewedWithoutNotes.length === 0 && attachmentBlockerCount === 0 ? "Local export package has no unresolved HIGH/CRITICAL finding, no reviewed finding without notes, and no attachment review blocker." : "Local export package still needs reviewer or attachment-review attention before institutional handoff.";
+
+      box.innerHTML = `<strong>Export readiness summary:</strong><span class="status-pill ${statusClass}" style="margin-left:8px;">${escapeHtml(statusText)}</span><div style="margin-top:8px;">Reviewed locally: ${escapeHtml(String(reviewed.length))} / ${escapeHtml(String(findings.length))}. Unresolved HIGH/CRITICAL: ${escapeHtml(String(unresolvedHigh.length))}. Escalated: ${escapeHtml(String(escalated.length))}. Needs more evidence: ${escapeHtml(String(needsEvidence.length))}. Reviewed without notes: ${escapeHtml(String(reviewedWithoutNotes.length))}. Attachment blockers: ${escapeHtml(String(attachmentBlockerCount))}.</div><div style="margin-top:8px;">Boundary: this panel does not authorize donor submission, legal submission, payment action, supplier action, production mutation, canonical registry mutation, signing, key access, or external execution.</div>`;
+    }
+
+    function renderReviewProgress() {
+      const report = state.evidenceReport;
+      if (!report) return;
+      const findings = report.findings || [];
+      const metrics = computeReviewWorkflowMetrics();
+      const reviewedCount = metrics.reviewed.length;
+      document.getElementById("reviewedCount").textContent = reviewedCount;
+      document.getElementById("reviewedNote").textContent = `${reviewedCount} of ${findings.length} findings have a local human review action.`;
+      const pill = document.getElementById("reviewProgressPill");
+      const stickyPill = document.getElementById("stickyProgressPill");
+      const stickyReviewed = document.getElementById("stickyReviewedCount");
+      const stickyUnreviewedHigh = document.getElementById("stickyUnreviewedHighCount");
+
+      stickyReviewed.textContent = `Reviewed: ${reviewedCount} / ${findings.length}`;
+      stickyUnreviewedHigh.textContent = `Unreviewed HIGH: ${metrics.unresolvedHigh.length}`;
+
+      if (reviewedCount === 0) {
+        pill.textContent = "Not started";
+        pill.className = "status-pill status-warn";
+        stickyPill.textContent = "Review not started";
+        stickyPill.className = "status-pill status-warn";
+      } else if (reviewedCount === findings.length) {
+        pill.textContent = "All findings reviewed locally";
+        pill.className = "status-pill status-ok";
+        stickyPill.textContent = "All reviewed locally";
+        stickyPill.className = "status-pill status-ok";
+      } else {
+        pill.textContent = "Partial local review";
+        pill.className = "status-pill status-warn";
+        stickyPill.textContent = "Partial local review";
+        stickyPill.className = "status-pill status-warn";
+      }
+    }
+
+    function exportReviewPackage() {
+      const report = state.evidenceReport;
+      const quality = state.inputQualityReport;
+      if (!report || !quality) return;
+      const findings = report.findings || [];
+      const reviews = Object.values(state.reviews).filter((review) => findings.some((finding) => finding.id === review.finding_id));
+      const attachmentReviews = Object.values(state.attachmentReviews || {});
+
+      const reviewedFindingsSnapshot = findings.filter((finding) => state.reviews[finding.id]).map((finding) => ({
+        finding_id: finding.id,
+        title: finding.title,
+        severity: finding.severity,
+        signal_family: finding.signal_family,
+        expense_id: finding.expense_id,
+        supplier_id: finding.supplier_id,
+        supplier_name: finding.supplier_name,
+        detected_signal: finding.detected_signal,
+        reviewer_question: finding.reviewer_question,
+        next_action: finding.next_action,
+        rule_trace: finding.rule_trace || null,
+        normative_trace: finding.normative_trace || null,
+        evidence_attachments: Array.isArray(finding.evidence_attachments) ? finding.evidence_attachments.map((attachment) => ({ ...attachment, local_document_review: state.attachmentReviews[attachment.attachment_id] || null })) : [],
+        human_review: state.reviews[finding.id]
+      }));
+
+      const packagePayload = {
+        package_type: "LEO_LOCAL_GRANT_EXPENSE_HUMAN_REVIEW_PACKAGE",
+        package_version: "v0.4",
+        dashboard_ui_version: "v1.0",
+        local_review_storage_schema_version: "v1.0",
+        exported_at: new Date().toISOString(),
+        source_report_id: report.report_id,
+        source_report_version: report.report_version,
+        input_quality_status: report.summary?.input_quality_status || quality.status,
+        findings_count: findings.length,
+        reviewed_findings_count: reviews.length,
+        review_actions: reviews,
+        attachment_reviews_count: attachmentReviews.length,
+        attachment_reviews: attachmentReviews,
+        reviewed_findings_snapshot: reviewedFindingsSnapshot,
+        export_content_summary: {
+          includes_local_reviewer_actions: true,
+          includes_reviewed_finding_snapshots: true,
+          includes_rule_traces: true,
+          includes_normative_trace_placeholders: true,
+          includes_attachment_metadata: true,
+          includes_zero_autonomy_boundary_metadata: true,
+          embeds_document_files: false,
+          performs_ocr: false,
+          submits_reports: false,
+          signs_records: false,
+          mutates_production_systems: false,
+          mutates_canonical_registry: false
+        },
+        evidence_attachment_export_boundary: {
+          attachment_metadata_included: true,
+          document_files_embedded: false,
+          document_files_opened: false,
+          document_files_parsed: false,
+          ocr_performed: false,
+          ai_document_reading_performed: false,
+          document_signing_performed: false,
+          external_transmission_performed: false,
+          statement: "Evidence attachments are exported as local reference metadata only. The package does not embed, open, parse, OCR, summarize, sign, transmit, or validate attached documents."
+        },
+        zero_autonomy_boundary: {
+          no_donor_compliance_verdict: true,
+          no_fraud_verdict: true,
+          no_legal_conclusion: true,
+          no_payment_blocking: true,
+          no_supplier_punishment: true,
+          no_production_mutation: true,
+          no_canonical_registry_mutation: true,
+          no_autonomous_enforcement: true,
+          no_signing_or_key_access: true,
+          no_external_execution: true
+        }
+      };
+
+      const blob = new Blob([JSON.stringify(packagePayload, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "leo_grant_expense_human_review_package_v0.4.json";
+      link.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function showValidation(kind, messages) {
+      const box = document.getElementById("validationBox");
+      box.className = `validation-box ${kind}`;
+      box.innerHTML = `<strong>${kind === "ok" ? "Dashboard consistency check passed" : "Dashboard consistency check"}</strong><ul>${messages.map((message) => `<li>${escapeHtml(message)}</li>`).join("")}</ul>`;
+      box.classList.remove("hidden");
+    }
+
+    function hideValidation() {
+      const box = document.getElementById("validationBox");
+      box.classList.add("hidden");
+      box.innerHTML = "";
+    }
+
+    function loadReviews() {
+      try {
+        const current = localStorage.getItem(STORAGE_KEY);
+        if (current) return JSON.parse(current);
+        for (const key of LEGACY_STORAGE_KEYS) {
+          const legacy = localStorage.getItem(key);
+          if (legacy) return JSON.parse(legacy);
+        }
+        return {};
+      } catch (error) { return {}; }
+    }
+
+    function saveReviews() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state.reviews, null, 2));
+    }
+
+    function loadAttachmentReviews() {
+      try {
+        const current = localStorage.getItem(ATTACHMENT_STORAGE_KEY);
+        if (current) return JSON.parse(current);
+        for (const key of LEGACY_ATTACHMENT_STORAGE_KEYS) {
+          const legacy = localStorage.getItem(key);
+          if (legacy) return JSON.parse(legacy);
+        }
+        return {};
+      } catch (error) { return {}; }
+    }
+
+    function saveAttachmentReviews() {
+      localStorage.setItem(ATTACHMENT_STORAGE_KEY, JSON.stringify(state.attachmentReviews, null, 2));
+    }
+
+    function displayOrPlaceholder(value, fallback = "Not provided") {
+      if (value === undefined || value === null || value === "") return escapeHtml(fallback);
+      return escapeHtml(value);
+    }
+
+    function displayBooleanOrPlaceholder(value) {
+      if (value === true) return "true";
+      if (value === false) return "false";
+      return "Not provided";
+    }
+
+    function valueOrDash(value) {
+      return value === undefined || value === null || value === "" ? "—" : String(value);
+    }
+
+    function setText(elementId, value) {
+      const element = document.getElementById(elementId);
+      if (element) element.textContent = String(value);
+    }
+
+    function truncateText(value, maxLength) {
+      const text = String(value ?? "");
+      if (text.length <= maxLength) return text;
+      return text.slice(0, Math.max(0, maxLength - 1)) + "…";
+    }
+
+    function escapeHtml(value) {
+      return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+
+    function cssEscape(value) {
+      if (window.CSS && typeof window.CSS.escape === "function") return window.CSS.escape(value);
+      return String(value).replace(/[^a-zA-Z0-9_-]/g, "\\$&");
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,1949 @@
+{
+  "report_id": "LOCAL_GRANT_EXPENSE_REVIEW_REPORT",
+  "report_type": "LEO_GRANT_EXPENSE_REVIEW_EVIDENCE_REPORT",
+  "report_version": "v0.1",
+  "source_name": "grant_expense_review_pipeline.py",
+  "generated_at": "2026-06-14T09:05:12.862262+00:00",
+  "dashboard_mode": "LOCAL_GRANT_EXPENSE_REVIEW",
+  "input_quality_summary": {
+    "file_count": 4,
+    "existing_file_count": 4,
+    "grant_expense_count": 15,
+    "budget_line_count": 8,
+    "reporting_rule_count": 12,
+    "supplier_profile_count": 7,
+    "issue_count": 5,
+    "error_count": 0,
+    "warning_count": 5,
+    "info_count": 0,
+    "ready_for_analysis": true
+  },
+  "summary": {
+    "findings_count": 25,
+    "evidence_count": 25,
+    "grant_expense_count": 15,
+    "supplier_count": 11,
+    "known_supplier_profile_count": 7,
+    "high_or_critical_findings_count": 12,
+    "reviewed_findings_count": 0,
+    "input_quality_status": "READY_WITH_WARNINGS",
+    "input_quality_warning_count": 5,
+    "input_quality_error_count": 0,
+    "signal_families": {
+      "budget_line_category_mismatch": 1,
+      "budget_line_usage_review": 3,
+      "cash_reimbursement_documentation_review": 1,
+      "deadline_sensitive_expense": 5,
+      "large_expense_review": 5,
+      "missing_activity_reference": 1,
+      "missing_required_contract": 2,
+      "repeated_round_value_expense": 2,
+      "unknown_supplier_reference": 5
+    },
+    "severity_distribution": {
+      "HIGH": 12,
+      "MEDIUM": 13
+    },
+    "autonomous_actions": 0
+  },
+  "findings": [
+    {
+      "id": "GEV-001",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-002",
+      "supplier_id": "SUP-002",
+      "supplier_name": "QuickBuild Technical Services Sp. z o.o.",
+      "subject": "QuickBuild Technical Services Sp. z o.o.",
+      "budget_line_id": "BL-002",
+      "amount": "24000.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-002 amount 24000.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "why_it_matters": "Large expenses require stronger documentation, budget justification, and reviewer traceability.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?",
+      "next_action": "Review supporting documents before accepting the expense.",
+      "evidence": [
+        "GEV-001"
+      ],
+      "metadata": {
+        "large_expense_threshold": "10000.00"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-005",
+        "source_rule_name": "Large Expense Human Review Rule",
+        "source_rule_file": "LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A large grant expense requires human review when the amount is material enough to warrant additional budget, activity, supplier, and documentation checks.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-005",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "PROCUREMENT_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "internal_audit"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-002",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-003",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "subject": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "amount": "18000.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-003 amount 18000.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "why_it_matters": "Large expenses require stronger documentation, budget justification, and reviewer traceability.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?",
+      "next_action": "Review supporting documents before accepting the expense.",
+      "evidence": [
+        "GEV-002"
+      ],
+      "metadata": {
+        "large_expense_threshold": "10000.00"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-005",
+        "source_rule_name": "Large Expense Human Review Rule",
+        "source_rule_file": "LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A large grant expense requires human review when the amount is material enough to warrant additional budget, activity, supplier, and documentation checks.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-005",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "PROCUREMENT_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "internal_audit"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-003",
+      "title": "Cash reimbursement documentation review",
+      "severity": "MEDIUM",
+      "signal_family": "cash_reimbursement_documentation_review",
+      "expense_id": "GE-005",
+      "supplier_id": "SUP-005",
+      "supplier_name": "MedPaper Logistics Sp. z o.o.",
+      "subject": "MedPaper Logistics Sp. z o.o.",
+      "budget_line_id": "BL-005",
+      "amount": "3600.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-005 uses cash reimbursement with document_status 'partial'. Budget line cash permission: True.",
+      "why_it_matters": "Cash reimbursement requires stronger documentation discipline because it is harder to trace than direct bank transfer.",
+      "reviewer_question": "Is the reimbursement supported by complete participant, recipient, or payment documentation?",
+      "next_action": "Review reimbursement documentation before accepting the expense.",
+      "evidence": [
+        "GEV-003"
+      ],
+      "metadata": {
+        "budget_allows_cash_reimbursement": true,
+        "document_status": "partial"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-003",
+        "source_rule_name": "Cash Reimbursement Documentation Review Rule",
+        "source_rule_file": "CASH_REIMBURSEMENT_DOCUMENTATION_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/CASH_REIMBURSEMENT_DOCUMENTATION_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A cash reimbursement requires human review when supporting documentation, activity linkage, or reimbursement justification must be checked before audit packaging.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-003",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "ACCOUNTING_RULE",
+          "INTERNAL_POLICY",
+          "DONOR_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "internal_audit",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-004",
+      "title": "Budget line category mismatch",
+      "severity": "HIGH",
+      "signal_family": "budget_line_category_mismatch",
+      "expense_id": "GE-007",
+      "supplier_id": "SUP-007",
+      "supplier_name": "ClearMed Equipment Group Sp. z o.o.",
+      "subject": "ClearMed Equipment Group Sp. z o.o.",
+      "budget_line_id": "BL-002",
+      "amount": "15500.00",
+      "currency": "PLN",
+      "detected_signal": "Expense category 'medical_equipment' is not listed as allowed under budget line BL-002 (IT equipment and digital infrastructure).",
+      "why_it_matters": "The expense category does not match the allowed categories for the selected budget line. This may be explainable, but it requires budget and donor reporting review.",
+      "reviewer_question": "Is this expense category allowed under the selected budget line, or should the expense be reclassified or justified?",
+      "next_action": "Escalate for human review of budget line mapping before accepting the expense.",
+      "evidence": [
+        "GEV-004"
+      ],
+      "metadata": {
+        "allowed_expense_categories": [
+          "it_equipment",
+          "software_services"
+        ],
+        "expense_category": "medical_equipment"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-001",
+        "source_rule_name": "Budget Line Category Mismatch Review Rule",
+        "source_rule_file": "BUDGET_LINE_CATEGORY_MISMATCH_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/BUDGET_LINE_CATEGORY_MISMATCH_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when its recorded expense category does not align with the referenced budget line category.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-001",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "INTERNAL_POLICY",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "project_manager",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-005",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-007",
+      "supplier_id": "SUP-007",
+      "supplier_name": "ClearMed Equipment Group Sp. z o.o.",
+      "subject": "ClearMed Equipment Group Sp. z o.o.",
+      "budget_line_id": "BL-002",
+      "amount": "15500.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-007 amount 15500.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "why_it_matters": "Large expenses require stronger documentation, budget justification, and reviewer traceability.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?",
+      "next_action": "Review supporting documents before accepting the expense.",
+      "evidence": [
+        "GEV-005"
+      ],
+      "metadata": {
+        "large_expense_threshold": "10000.00"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-005",
+        "source_rule_name": "Large Expense Human Review Rule",
+        "source_rule_file": "LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A large grant expense requires human review when the amount is material enough to warrant additional budget, activity, supplier, and documentation checks.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-005",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "PROCUREMENT_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "internal_audit"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-006",
+      "title": "Missing activity reference",
+      "severity": "MEDIUM",
+      "signal_family": "missing_activity_reference",
+      "expense_id": "GE-008",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "subject": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "amount": "10000.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-008 has no activity_reference, but its budget line requires a link to an activity or output.",
+      "why_it_matters": "A missing activity reference weakens the connection between the expense and the reported grant activity.",
+      "reviewer_question": "Which project activity, output, or deliverable does this expense support?",
+      "next_action": "Request activity or output reference before accepting the expense for reporting.",
+      "evidence": [
+        "GEV-006"
+      ],
+      "metadata": {
+        "requires_activity_reference": true
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-006",
+        "source_rule_name": "Missing Activity Reference Review Rule",
+        "source_rule_file": "MISSING_ACTIVITY_REFERENCE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/MISSING_ACTIVITY_REFERENCE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when it lacks an activity reference needed to connect the cost to a project activity, output, or implementation record.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-006",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-007",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-008",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "subject": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "amount": "10000.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-008 amount 10000.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "why_it_matters": "Large expenses require stronger documentation, budget justification, and reviewer traceability.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?",
+      "next_action": "Review supporting documents before accepting the expense.",
+      "evidence": [
+        "GEV-007"
+      ],
+      "metadata": {
+        "large_expense_threshold": "10000.00"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-005",
+        "source_rule_name": "Large Expense Human Review Rule",
+        "source_rule_file": "LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A large grant expense requires human review when the amount is material enough to warrant additional budget, activity, supplier, and documentation checks.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-005",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "PROCUREMENT_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "internal_audit"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-008",
+      "title": "Missing required contract",
+      "severity": "HIGH",
+      "signal_family": "missing_required_contract",
+      "expense_id": "GE-009",
+      "supplier_id": "SUP-004",
+      "supplier_name": "GreenLeaf Catering Sp. z o.o.",
+      "subject": "GreenLeaf Catering Sp. z o.o.",
+      "budget_line_id": "BL-004",
+      "amount": "5000.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-009 has no contract_id, but contract evidence is expected for category 'event_catering'.",
+      "why_it_matters": "Contracted services or travel-related expenses require authorization evidence to support grant reporting traceability.",
+      "reviewer_question": "Is there a contract or equivalent authorization for this expense?",
+      "next_action": "Request contract or equivalent authorization evidence before accepting the expense.",
+      "evidence": [
+        "GEV-008"
+      ],
+      "metadata": {
+        "budget_line_requires_contract": true,
+        "rule_requires_contract": false,
+        "expense_category": "event_catering"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-007",
+        "source_rule_name": "Missing Required Contract Review Rule",
+        "source_rule_file": "MISSING_REQUIRED_CONTRACT_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/MISSING_REQUIRED_CONTRACT_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when the transaction appears to require a contract or formal agreement but the required contract reference is missing or unavailable.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-007",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL",
+          "CONTRACTUAL"
+        ],
+        "reference_domain": [
+          "CONTRACT",
+          "INTERNAL_POLICY",
+          "PROCUREMENT_RULE",
+          "DONOR_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "legal_counsel"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-009",
+      "title": "Missing required contract",
+      "severity": "HIGH",
+      "signal_family": "missing_required_contract",
+      "expense_id": "GE-010",
+      "supplier_id": "SUP-004",
+      "supplier_name": "GreenLeaf Catering Sp. z o.o.",
+      "subject": "GreenLeaf Catering Sp. z o.o.",
+      "budget_line_id": "BL-004",
+      "amount": "5000.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-010 has no contract_id, but contract evidence is expected for category 'event_catering'.",
+      "why_it_matters": "Contracted services or travel-related expenses require authorization evidence to support grant reporting traceability.",
+      "reviewer_question": "Is there a contract or equivalent authorization for this expense?",
+      "next_action": "Request contract or equivalent authorization evidence before accepting the expense.",
+      "evidence": [
+        "GEV-009"
+      ],
+      "metadata": {
+        "budget_line_requires_contract": true,
+        "rule_requires_contract": false,
+        "expense_category": "event_catering"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-007",
+        "source_rule_name": "Missing Required Contract Review Rule",
+        "source_rule_file": "MISSING_REQUIRED_CONTRACT_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/MISSING_REQUIRED_CONTRACT_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when the transaction appears to require a contract or formal agreement but the required contract reference is missing or unavailable.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-007",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL",
+          "CONTRACTUAL"
+        ],
+        "reference_domain": [
+          "CONTRACT",
+          "INTERNAL_POLICY",
+          "PROCUREMENT_RULE",
+          "DONOR_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "legal_counsel"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-010",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-011",
+      "supplier_id": "SUP-008",
+      "supplier_name": "Unknown Local Supplier Sp. z o.o.",
+      "subject": "Unknown Local Supplier Sp. z o.o.",
+      "budget_line_id": "BL-001",
+      "amount": "2100.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-011 references supplier_id SUP-008, but no supplier profile exists in the grant review dataset.",
+      "why_it_matters": "The expense supplier is not present in the supplier reference file. The reviewer should verify identity, role, and suitability before accepting the expense trail.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?",
+      "next_action": "Request supplier profile or supporting identity documentation before accepting this expense.",
+      "evidence": [
+        "GEV-010"
+      ],
+      "metadata": {
+        "missing_supplier_id": "SUP-008"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-009",
+        "source_rule_name": "Unknown Supplier Reference Review Rule",
+        "source_rule_file": "UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when the referenced supplier is not present in the known supplier profile register and must be checked before audit packaging.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-009",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "CONTRACTUAL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "CONTRACT",
+          "PROCUREMENT_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-011",
+      "title": "Deadline-sensitive expense",
+      "severity": "MEDIUM",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-011",
+      "supplier_id": "SUP-008",
+      "supplier_name": "Unknown Local Supplier Sp. z o.o.",
+      "subject": "Unknown Local Supplier Sp. z o.o.",
+      "budget_line_id": "BL-001",
+      "amount": "2100.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-011 was recorded 6 day(s) before reporting period close (2026-03-31).",
+      "why_it_matters": "Expenses recorded close to the reporting deadline may be legitimate, but they require complete documentation and timing justification.",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?",
+      "next_action": "Review timing, documentation completeness, and reporting justification.",
+      "evidence": [
+        "GEV-011"
+      ],
+      "metadata": {
+        "period_end_date": "2026-03-31",
+        "days_before_close": 6,
+        "deadline_window_days": 7,
+        "budget_line_deadline_sensitive": false
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-004",
+        "source_rule_name": "Deadline-Sensitive Expense Review Rule",
+        "source_rule_file": "DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when its timing is close to a reporting, eligibility, or project-period boundary that may require additional explanation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-004",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "donor_contact"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-012",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-012",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "subject": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "amount": "9200.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-012 references supplier_id SUP-009, but no supplier profile exists in the grant review dataset.",
+      "why_it_matters": "The expense supplier is not present in the supplier reference file. The reviewer should verify identity, role, and suitability before accepting the expense trail.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?",
+      "next_action": "Request supplier profile or supporting identity documentation before accepting this expense.",
+      "evidence": [
+        "GEV-012"
+      ],
+      "metadata": {
+        "missing_supplier_id": "SUP-009"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-009",
+        "source_rule_name": "Unknown Supplier Reference Review Rule",
+        "source_rule_file": "UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when the referenced supplier is not present in the known supplier profile register and must be checked before audit packaging.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-009",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "CONTRACTUAL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "CONTRACT",
+          "PROCUREMENT_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-013",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-012",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "subject": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "amount": "9200.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-012 was recorded 3 day(s) before reporting period close (2026-03-31).",
+      "why_it_matters": "Expenses recorded close to the reporting deadline may be legitimate, but they require complete documentation and timing justification.",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?",
+      "next_action": "Review timing, documentation completeness, and reporting justification.",
+      "evidence": [
+        "GEV-013"
+      ],
+      "metadata": {
+        "period_end_date": "2026-03-31",
+        "days_before_close": 3,
+        "deadline_window_days": 7,
+        "budget_line_deadline_sensitive": true
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-004",
+        "source_rule_name": "Deadline-Sensitive Expense Review Rule",
+        "source_rule_file": "DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when its timing is close to a reporting, eligibility, or project-period boundary that may require additional explanation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-004",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "donor_contact"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-014",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-013",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "subject": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "amount": "8800.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-013 references supplier_id SUP-009, but no supplier profile exists in the grant review dataset.",
+      "why_it_matters": "The expense supplier is not present in the supplier reference file. The reviewer should verify identity, role, and suitability before accepting the expense trail.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?",
+      "next_action": "Request supplier profile or supporting identity documentation before accepting this expense.",
+      "evidence": [
+        "GEV-014"
+      ],
+      "metadata": {
+        "missing_supplier_id": "SUP-009"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-009",
+        "source_rule_name": "Unknown Supplier Reference Review Rule",
+        "source_rule_file": "UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when the referenced supplier is not present in the known supplier profile register and must be checked before audit packaging.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-009",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "CONTRACTUAL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "CONTRACT",
+          "PROCUREMENT_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-015",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-013",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "subject": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "amount": "8800.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-013 was recorded 2 day(s) before reporting period close (2026-03-31).",
+      "why_it_matters": "Expenses recorded close to the reporting deadline may be legitimate, but they require complete documentation and timing justification.",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?",
+      "next_action": "Review timing, documentation completeness, and reporting justification.",
+      "evidence": [
+        "GEV-015"
+      ],
+      "metadata": {
+        "period_end_date": "2026-03-31",
+        "days_before_close": 2,
+        "deadline_window_days": 7,
+        "budget_line_deadline_sensitive": true
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-004",
+        "source_rule_name": "Deadline-Sensitive Expense Review Rule",
+        "source_rule_file": "DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when its timing is close to a reporting, eligibility, or project-period boundary that may require additional explanation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-004",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "donor_contact"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-016",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-014",
+      "supplier_id": "SUP-010",
+      "supplier_name": "Strategic Horizon Advisory Sp. z o.o.",
+      "subject": "Strategic Horizon Advisory Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "amount": "14500.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-014 references supplier_id SUP-010, but no supplier profile exists in the grant review dataset.",
+      "why_it_matters": "The expense supplier is not present in the supplier reference file. The reviewer should verify identity, role, and suitability before accepting the expense trail.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?",
+      "next_action": "Request supplier profile or supporting identity documentation before accepting this expense.",
+      "evidence": [
+        "GEV-016"
+      ],
+      "metadata": {
+        "missing_supplier_id": "SUP-010"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-009",
+        "source_rule_name": "Unknown Supplier Reference Review Rule",
+        "source_rule_file": "UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when the referenced supplier is not present in the known supplier profile register and must be checked before audit packaging.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-009",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "CONTRACTUAL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "CONTRACT",
+          "PROCUREMENT_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-017",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-014",
+      "supplier_id": "SUP-010",
+      "supplier_name": "Strategic Horizon Advisory Sp. z o.o.",
+      "subject": "Strategic Horizon Advisory Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "amount": "14500.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-014 was recorded 1 day(s) before reporting period close (2026-03-31).",
+      "why_it_matters": "Expenses recorded close to the reporting deadline may be legitimate, but they require complete documentation and timing justification.",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?",
+      "next_action": "Review timing, documentation completeness, and reporting justification.",
+      "evidence": [
+        "GEV-017"
+      ],
+      "metadata": {
+        "period_end_date": "2026-03-31",
+        "days_before_close": 1,
+        "deadline_window_days": 7,
+        "budget_line_deadline_sensitive": true
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-004",
+        "source_rule_name": "Deadline-Sensitive Expense Review Rule",
+        "source_rule_file": "DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when its timing is close to a reporting, eligibility, or project-period boundary that may require additional explanation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-004",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "donor_contact"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-018",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-014",
+      "supplier_id": "SUP-010",
+      "supplier_name": "Strategic Horizon Advisory Sp. z o.o.",
+      "subject": "Strategic Horizon Advisory Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "amount": "14500.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-014 amount 14500.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "why_it_matters": "Large expenses require stronger documentation, budget justification, and reviewer traceability.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?",
+      "next_action": "Review supporting documents before accepting the expense.",
+      "evidence": [
+        "GEV-018"
+      ],
+      "metadata": {
+        "large_expense_threshold": "10000.00"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-005",
+        "source_rule_name": "Large Expense Human Review Rule",
+        "source_rule_file": "LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A large grant expense requires human review when the amount is material enough to warrant additional budget, activity, supplier, and documentation checks.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-005",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "PROCUREMENT_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "internal_audit"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-019",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-015",
+      "supplier_id": "SUP-011",
+      "supplier_name": "Community Media Lab Sp. z o.o.",
+      "subject": "Community Media Lab Sp. z o.o.",
+      "budget_line_id": "BL-008",
+      "amount": "7600.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-015 references supplier_id SUP-011, but no supplier profile exists in the grant review dataset.",
+      "why_it_matters": "The expense supplier is not present in the supplier reference file. The reviewer should verify identity, role, and suitability before accepting the expense trail.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?",
+      "next_action": "Request supplier profile or supporting identity documentation before accepting this expense.",
+      "evidence": [
+        "GEV-019"
+      ],
+      "metadata": {
+        "missing_supplier_id": "SUP-011"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-009",
+        "source_rule_name": "Unknown Supplier Reference Review Rule",
+        "source_rule_file": "UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/UNKNOWN_SUPPLIER_REFERENCE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when the referenced supplier is not present in the known supplier profile register and must be checked before audit packaging.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-009",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "CONTRACTUAL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "CONTRACT",
+          "PROCUREMENT_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-020",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-015",
+      "supplier_id": "SUP-011",
+      "supplier_name": "Community Media Lab Sp. z o.o.",
+      "subject": "Community Media Lab Sp. z o.o.",
+      "budget_line_id": "BL-008",
+      "amount": "7600.00",
+      "currency": "PLN",
+      "detected_signal": "Expense GE-015 was recorded 0 day(s) before reporting period close (2026-03-31).",
+      "why_it_matters": "Expenses recorded close to the reporting deadline may be legitimate, but they require complete documentation and timing justification.",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?",
+      "next_action": "Review timing, documentation completeness, and reporting justification.",
+      "evidence": [
+        "GEV-020"
+      ],
+      "metadata": {
+        "period_end_date": "2026-03-31",
+        "days_before_close": 0,
+        "deadline_window_days": 7,
+        "budget_line_deadline_sensitive": true
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-004",
+        "source_rule_name": "Deadline-Sensitive Expense Review Rule",
+        "source_rule_file": "DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/DEADLINE_SENSITIVE_EXPENSE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when its timing is close to a reporting, eligibility, or project-period boundary that may require additional explanation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-004",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting",
+          "donor_contact"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-021",
+      "title": "Repeated round-value expenses",
+      "severity": "MEDIUM",
+      "signal_family": "repeated_round_value_expense",
+      "expense_id": "GE-003",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "subject": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "amount": "18000.00",
+      "currency": "PLN",
+      "detected_signal": "2 round-value expenses were detected for supplier SUP-003, category 'consulting', period 2026-Q1. Total amount: 28000.00 PLN",
+      "why_it_matters": "Repeated round-value expenses may be legitimate, but they can also indicate weak cost breakdown or repeated advances requiring documentation review.",
+      "reviewer_question": "Are repeated round-value expenses supported by real cost breakdowns and activity evidence?",
+      "next_action": "Review the grouped expenses together instead of treating them as isolated rows.",
+      "evidence": [
+        "GEV-021"
+      ],
+      "metadata": {
+        "group_supplier_id": "SUP-003",
+        "group_expense_category": "consulting",
+        "group_reporting_period": "2026-Q1",
+        "group_expense_ids": [
+          "GE-003",
+          "GE-008"
+        ],
+        "group_total_amount": "28000.00"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-008",
+        "source_rule_name": "Repeated Round-Value Expense Review Rule",
+        "source_rule_file": "REPEATED_ROUND_VALUE_EXPENSE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/REPEATED_ROUND_VALUE_EXPENSE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "Grant expenses require human review when repeated round-value amounts create a pattern that may need explanation, supporting documentation, or budget-owner confirmation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-008",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "ACCOUNTING_RULE",
+          "PROCUREMENT_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "internal_audit",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-022",
+      "title": "Repeated round-value expenses",
+      "severity": "MEDIUM",
+      "signal_family": "repeated_round_value_expense",
+      "expense_id": "GE-009",
+      "supplier_id": "SUP-004",
+      "supplier_name": "GreenLeaf Catering Sp. z o.o.",
+      "subject": "GreenLeaf Catering Sp. z o.o.",
+      "budget_line_id": "BL-004",
+      "amount": "5000.00",
+      "currency": "PLN",
+      "detected_signal": "2 round-value expenses were detected for supplier SUP-004, category 'event_catering', period 2026-Q1. Total amount: 10000.00 PLN",
+      "why_it_matters": "Repeated round-value expenses may be legitimate, but they can also indicate weak cost breakdown or repeated advances requiring documentation review.",
+      "reviewer_question": "Are repeated round-value expenses supported by real cost breakdowns and activity evidence?",
+      "next_action": "Review the grouped expenses together instead of treating them as isolated rows.",
+      "evidence": [
+        "GEV-022"
+      ],
+      "metadata": {
+        "group_supplier_id": "SUP-004",
+        "group_expense_category": "event_catering",
+        "group_reporting_period": "2026-Q1",
+        "group_expense_ids": [
+          "GE-009",
+          "GE-010"
+        ],
+        "group_total_amount": "10000.00"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-008",
+        "source_rule_name": "Repeated Round-Value Expense Review Rule",
+        "source_rule_file": "REPEATED_ROUND_VALUE_EXPENSE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/REPEATED_ROUND_VALUE_EXPENSE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "Grant expenses require human review when repeated round-value amounts create a pattern that may need explanation, supporting documentation, or budget-owner confirmation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-008",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "ACCOUNTING_RULE",
+          "PROCUREMENT_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "internal_audit",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-023",
+      "title": "Budget line usage review",
+      "severity": "MEDIUM",
+      "signal_family": "budget_line_usage_review",
+      "expense_id": "BUDGET-USAGE-BL-002",
+      "supplier_id": "MULTIPLE_OR_NOT_APPLICABLE",
+      "supplier_name": "Budget line aggregate",
+      "subject": "Budget line aggregate",
+      "budget_line_id": "BL-002",
+      "amount": "39500.00",
+      "currency": "PLN",
+      "detected_signal": "Budget line BL-002 has used 39500.00 of approved 45000.00 PLN (87.78%).",
+      "why_it_matters": "A budget line near or above its approved amount requires spending justification and reporting review.",
+      "reviewer_question": "Is the budget line approaching or exceeding its approved amount for documented reasons?",
+      "next_action": "Review aggregate budget usage before accepting additional expenses under this budget line.",
+      "evidence": [
+        "GEV-023"
+      ],
+      "metadata": {
+        "budget_line_id": "BL-002",
+        "approved_amount": "45000.00",
+        "used_amount": "39500.00",
+        "usage_ratio": "0.8777777777777777777777777778"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-002",
+        "source_rule_name": "Budget Line Usage Review Rule",
+        "source_rule_file": "BUDGET_LINE_USAGE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/BUDGET_LINE_USAGE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant budget line requires human review when accumulated expense usage indicates material consumption of the allocated budget or a pattern requiring budget-owner confirmation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-002",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "ACCOUNTING_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "project_manager",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-024",
+      "title": "Budget line usage review",
+      "severity": "MEDIUM",
+      "signal_family": "budget_line_usage_review",
+      "expense_id": "BUDGET-USAGE-BL-003",
+      "supplier_id": "MULTIPLE_OR_NOT_APPLICABLE",
+      "supplier_name": "Budget line aggregate",
+      "subject": "Budget line aggregate",
+      "budget_line_id": "BL-003",
+      "amount": "42500.00",
+      "currency": "PLN",
+      "detected_signal": "Budget line BL-003 has used 42500.00 of approved 50000.00 PLN (85.00%).",
+      "why_it_matters": "A budget line near or above its approved amount requires spending justification and reporting review.",
+      "reviewer_question": "Is the budget line approaching or exceeding its approved amount for documented reasons?",
+      "next_action": "Review aggregate budget usage before accepting additional expenses under this budget line.",
+      "evidence": [
+        "GEV-024"
+      ],
+      "metadata": {
+        "budget_line_id": "BL-003",
+        "approved_amount": "50000.00",
+        "used_amount": "42500.00",
+        "usage_ratio": "0.85"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-002",
+        "source_rule_name": "Budget Line Usage Review Rule",
+        "source_rule_file": "BUDGET_LINE_USAGE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/BUDGET_LINE_USAGE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant budget line requires human review when accumulated expense usage indicates material consumption of the allocated budget or a pattern requiring budget-owner confirmation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-002",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "ACCOUNTING_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "project_manager",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    },
+    {
+      "id": "GEV-025",
+      "title": "Budget line usage review",
+      "severity": "MEDIUM",
+      "signal_family": "budget_line_usage_review",
+      "expense_id": "BUDGET-USAGE-BL-007",
+      "supplier_id": "MULTIPLE_OR_NOT_APPLICABLE",
+      "supplier_name": "Budget line aggregate",
+      "subject": "Budget line aggregate",
+      "budget_line_id": "BL-007",
+      "amount": "18000.00",
+      "currency": "PLN",
+      "detected_signal": "Budget line BL-007 has used 18000.00 of approved 20000.00 PLN (90.00%).",
+      "why_it_matters": "A budget line near or above its approved amount requires spending justification and reporting review.",
+      "reviewer_question": "Is the budget line approaching or exceeding its approved amount for documented reasons?",
+      "next_action": "Review aggregate budget usage before accepting additional expenses under this budget line.",
+      "evidence": [
+        "GEV-025"
+      ],
+      "metadata": {
+        "budget_line_id": "BL-007",
+        "approved_amount": "20000.00",
+        "used_amount": "18000.00",
+        "usage_ratio": "0.9"
+      },
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-002",
+        "source_rule_name": "Budget Line Usage Review Rule",
+        "source_rule_file": "BUDGET_LINE_USAGE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/BUDGET_LINE_USAGE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant budget line requires human review when accumulated expense usage indicates material consumption of the allocated budget or a pattern requiring budget-owner confirmation.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-002",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "ACCOUNTING_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "project_manager",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      }
+    }
+  ],
+  "evidence_objects": [
+    {
+      "evidence_id": "GEV-001",
+      "finding_id": "GEV-001",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-002",
+      "supplier_id": "SUP-002",
+      "supplier_name": "QuickBuild Technical Services Sp. z o.o.",
+      "budget_line_id": "BL-002",
+      "reason": "Expense GE-002 amount 24000.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?"
+    },
+    {
+      "evidence_id": "GEV-002",
+      "finding_id": "GEV-002",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-003",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "reason": "Expense GE-003 amount 18000.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?"
+    },
+    {
+      "evidence_id": "GEV-003",
+      "finding_id": "GEV-003",
+      "title": "Cash reimbursement documentation review",
+      "severity": "MEDIUM",
+      "signal_family": "cash_reimbursement_documentation_review",
+      "expense_id": "GE-005",
+      "supplier_id": "SUP-005",
+      "supplier_name": "MedPaper Logistics Sp. z o.o.",
+      "budget_line_id": "BL-005",
+      "reason": "Expense GE-005 uses cash reimbursement with document_status 'partial'. Budget line cash permission: True.",
+      "reviewer_question": "Is the reimbursement supported by complete participant, recipient, or payment documentation?"
+    },
+    {
+      "evidence_id": "GEV-004",
+      "finding_id": "GEV-004",
+      "title": "Budget line category mismatch",
+      "severity": "HIGH",
+      "signal_family": "budget_line_category_mismatch",
+      "expense_id": "GE-007",
+      "supplier_id": "SUP-007",
+      "supplier_name": "ClearMed Equipment Group Sp. z o.o.",
+      "budget_line_id": "BL-002",
+      "reason": "Expense category 'medical_equipment' is not listed as allowed under budget line BL-002 (IT equipment and digital infrastructure).",
+      "reviewer_question": "Is this expense category allowed under the selected budget line, or should the expense be reclassified or justified?"
+    },
+    {
+      "evidence_id": "GEV-005",
+      "finding_id": "GEV-005",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-007",
+      "supplier_id": "SUP-007",
+      "supplier_name": "ClearMed Equipment Group Sp. z o.o.",
+      "budget_line_id": "BL-002",
+      "reason": "Expense GE-007 amount 15500.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?"
+    },
+    {
+      "evidence_id": "GEV-006",
+      "finding_id": "GEV-006",
+      "title": "Missing activity reference",
+      "severity": "MEDIUM",
+      "signal_family": "missing_activity_reference",
+      "expense_id": "GE-008",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "reason": "Expense GE-008 has no activity_reference, but its budget line requires a link to an activity or output.",
+      "reviewer_question": "Which project activity, output, or deliverable does this expense support?"
+    },
+    {
+      "evidence_id": "GEV-007",
+      "finding_id": "GEV-007",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-008",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "reason": "Expense GE-008 amount 10000.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?"
+    },
+    {
+      "evidence_id": "GEV-008",
+      "finding_id": "GEV-008",
+      "title": "Missing required contract",
+      "severity": "HIGH",
+      "signal_family": "missing_required_contract",
+      "expense_id": "GE-009",
+      "supplier_id": "SUP-004",
+      "supplier_name": "GreenLeaf Catering Sp. z o.o.",
+      "budget_line_id": "BL-004",
+      "reason": "Expense GE-009 has no contract_id, but contract evidence is expected for category 'event_catering'.",
+      "reviewer_question": "Is there a contract or equivalent authorization for this expense?"
+    },
+    {
+      "evidence_id": "GEV-009",
+      "finding_id": "GEV-009",
+      "title": "Missing required contract",
+      "severity": "HIGH",
+      "signal_family": "missing_required_contract",
+      "expense_id": "GE-010",
+      "supplier_id": "SUP-004",
+      "supplier_name": "GreenLeaf Catering Sp. z o.o.",
+      "budget_line_id": "BL-004",
+      "reason": "Expense GE-010 has no contract_id, but contract evidence is expected for category 'event_catering'.",
+      "reviewer_question": "Is there a contract or equivalent authorization for this expense?"
+    },
+    {
+      "evidence_id": "GEV-010",
+      "finding_id": "GEV-010",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-011",
+      "supplier_id": "SUP-008",
+      "supplier_name": "Unknown Local Supplier Sp. z o.o.",
+      "budget_line_id": "BL-001",
+      "reason": "Expense GE-011 references supplier_id SUP-008, but no supplier profile exists in the grant review dataset.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?"
+    },
+    {
+      "evidence_id": "GEV-011",
+      "finding_id": "GEV-011",
+      "title": "Deadline-sensitive expense",
+      "severity": "MEDIUM",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-011",
+      "supplier_id": "SUP-008",
+      "supplier_name": "Unknown Local Supplier Sp. z o.o.",
+      "budget_line_id": "BL-001",
+      "reason": "Expense GE-011 was recorded 6 day(s) before reporting period close (2026-03-31).",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?"
+    },
+    {
+      "evidence_id": "GEV-012",
+      "finding_id": "GEV-012",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-012",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "reason": "Expense GE-012 references supplier_id SUP-009, but no supplier profile exists in the grant review dataset.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?"
+    },
+    {
+      "evidence_id": "GEV-013",
+      "finding_id": "GEV-013",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-012",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "reason": "Expense GE-012 was recorded 3 day(s) before reporting period close (2026-03-31).",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?"
+    },
+    {
+      "evidence_id": "GEV-014",
+      "finding_id": "GEV-014",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-013",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "reason": "Expense GE-013 references supplier_id SUP-009, but no supplier profile exists in the grant review dataset.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?"
+    },
+    {
+      "evidence_id": "GEV-015",
+      "finding_id": "GEV-015",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-013",
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "budget_line_id": "BL-007",
+      "reason": "Expense GE-013 was recorded 2 day(s) before reporting period close (2026-03-31).",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?"
+    },
+    {
+      "evidence_id": "GEV-016",
+      "finding_id": "GEV-016",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-014",
+      "supplier_id": "SUP-010",
+      "supplier_name": "Strategic Horizon Advisory Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "reason": "Expense GE-014 references supplier_id SUP-010, but no supplier profile exists in the grant review dataset.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?"
+    },
+    {
+      "evidence_id": "GEV-017",
+      "finding_id": "GEV-017",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-014",
+      "supplier_id": "SUP-010",
+      "supplier_name": "Strategic Horizon Advisory Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "reason": "Expense GE-014 was recorded 1 day(s) before reporting period close (2026-03-31).",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?"
+    },
+    {
+      "evidence_id": "GEV-018",
+      "finding_id": "GEV-018",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-014",
+      "supplier_id": "SUP-010",
+      "supplier_name": "Strategic Horizon Advisory Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "reason": "Expense GE-014 amount 14500.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?"
+    },
+    {
+      "evidence_id": "GEV-019",
+      "finding_id": "GEV-019",
+      "title": "Unknown supplier reference",
+      "severity": "MEDIUM",
+      "signal_family": "unknown_supplier_reference",
+      "expense_id": "GE-015",
+      "supplier_id": "SUP-011",
+      "supplier_name": "Community Media Lab Sp. z o.o.",
+      "budget_line_id": "BL-008",
+      "reason": "Expense GE-015 references supplier_id SUP-011, but no supplier profile exists in the grant review dataset.",
+      "reviewer_question": "Does this supplier have verified identity, role, and documentation for the grant-funded activity?"
+    },
+    {
+      "evidence_id": "GEV-020",
+      "finding_id": "GEV-020",
+      "title": "Deadline-sensitive expense",
+      "severity": "HIGH",
+      "signal_family": "deadline_sensitive_expense",
+      "expense_id": "GE-015",
+      "supplier_id": "SUP-011",
+      "supplier_name": "Community Media Lab Sp. z o.o.",
+      "budget_line_id": "BL-008",
+      "reason": "Expense GE-015 was recorded 0 day(s) before reporting period close (2026-03-31).",
+      "reviewer_question": "Was this expense submitted near the reporting deadline for a documented operational reason?"
+    },
+    {
+      "evidence_id": "GEV-021",
+      "finding_id": "GEV-021",
+      "title": "Repeated round-value expenses",
+      "severity": "MEDIUM",
+      "signal_family": "repeated_round_value_expense",
+      "expense_id": "GE-003",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "budget_line_id": "BL-003",
+      "reason": "2 round-value expenses were detected for supplier SUP-003, category 'consulting', period 2026-Q1. Total amount: 28000.00 PLN",
+      "reviewer_question": "Are repeated round-value expenses supported by real cost breakdowns and activity evidence?"
+    },
+    {
+      "evidence_id": "GEV-022",
+      "finding_id": "GEV-022",
+      "title": "Repeated round-value expenses",
+      "severity": "MEDIUM",
+      "signal_family": "repeated_round_value_expense",
+      "expense_id": "GE-009",
+      "supplier_id": "SUP-004",
+      "supplier_name": "GreenLeaf Catering Sp. z o.o.",
+      "budget_line_id": "BL-004",
+      "reason": "2 round-value expenses were detected for supplier SUP-004, category 'event_catering', period 2026-Q1. Total amount: 10000.00 PLN",
+      "reviewer_question": "Are repeated round-value expenses supported by real cost breakdowns and activity evidence?"
+    },
+    {
+      "evidence_id": "GEV-023",
+      "finding_id": "GEV-023",
+      "title": "Budget line usage review",
+      "severity": "MEDIUM",
+      "signal_family": "budget_line_usage_review",
+      "expense_id": "BUDGET-USAGE-BL-002",
+      "supplier_id": "MULTIPLE_OR_NOT_APPLICABLE",
+      "supplier_name": "Budget line aggregate",
+      "budget_line_id": "BL-002",
+      "reason": "Budget line BL-002 has used 39500.00 of approved 45000.00 PLN (87.78%).",
+      "reviewer_question": "Is the budget line approaching or exceeding its approved amount for documented reasons?"
+    },
+    {
+      "evidence_id": "GEV-024",
+      "finding_id": "GEV-024",
+      "title": "Budget line usage review",
+      "severity": "MEDIUM",
+      "signal_family": "budget_line_usage_review",
+      "expense_id": "BUDGET-USAGE-BL-003",
+      "supplier_id": "MULTIPLE_OR_NOT_APPLICABLE",
+      "supplier_name": "Budget line aggregate",
+      "budget_line_id": "BL-003",
+      "reason": "Budget line BL-003 has used 42500.00 of approved 50000.00 PLN (85.00%).",
+      "reviewer_question": "Is the budget line approaching or exceeding its approved amount for documented reasons?"
+    },
+    {
+      "evidence_id": "GEV-025",
+      "finding_id": "GEV-025",
+      "title": "Budget line usage review",
+      "severity": "MEDIUM",
+      "signal_family": "budget_line_usage_review",
+      "expense_id": "BUDGET-USAGE-BL-007",
+      "supplier_id": "MULTIPLE_OR_NOT_APPLICABLE",
+      "supplier_name": "Budget line aggregate",
+      "budget_line_id": "BL-007",
+      "reason": "Budget line BL-007 has used 18000.00 of approved 20000.00 PLN (90.00%).",
+      "reviewer_question": "Is the budget line approaching or exceeding its approved amount for documented reasons?"
+    }
+  ],
+  "signal_families": {
+    "budget_line_category_mismatch": 1,
+    "budget_line_usage_review": 3,
+    "cash_reimbursement_documentation_review": 1,
+    "deadline_sensitive_expense": 5,
+    "large_expense_review": 5,
+    "missing_activity_reference": 1,
+    "missing_required_contract": 2,
+    "repeated_round_value_expense": 2,
+    "unknown_supplier_reference": 5
+  },
+  "supplier_summary": [
+    {
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "finding_count": 4,
+      "max_severity": "HIGH",
+      "evidence_references": [
+        "GEV-002",
+        "GEV-006",
+        "GEV-007",
+        "GEV-021"
+      ]
+    },
+    {
+      "supplier_id": "SUP-009",
+      "supplier_name": "TravelPoint Europe Sp. z o.o.",
+      "finding_count": 4,
+      "max_severity": "HIGH",
+      "evidence_references": [
+        "GEV-012",
+        "GEV-013",
+        "GEV-014",
+        "GEV-015"
+      ]
+    },
+    {
+      "supplier_id": "SUP-004",
+      "supplier_name": "GreenLeaf Catering Sp. z o.o.",
+      "finding_count": 3,
+      "max_severity": "HIGH",
+      "evidence_references": [
+        "GEV-008",
+        "GEV-009",
+        "GEV-022"
+      ]
+    },
+    {
+      "supplier_id": "SUP-010",
+      "supplier_name": "Strategic Horizon Advisory Sp. z o.o.",
+      "finding_count": 3,
+      "max_severity": "HIGH",
+      "evidence_references": [
+        "GEV-016",
+        "GEV-017",
+        "GEV-018"
+      ]
+    },
+    {
+      "supplier_id": "SUP-007",
+      "supplier_name": "ClearMed Equipment Group Sp. z o.o.",
+      "finding_count": 2,
+      "max_severity": "HIGH",
+      "evidence_references": [
+        "GEV-004",
+        "GEV-005"
+      ]
+    },
+    {
+      "supplier_id": "SUP-011",
+      "supplier_name": "Community Media Lab Sp. z o.o.",
+      "finding_count": 2,
+      "max_severity": "HIGH",
+      "evidence_references": [
+        "GEV-019",
+        "GEV-020"
+      ]
+    },
+    {
+      "supplier_id": "SUP-002",
+      "supplier_name": "QuickBuild Technical Services Sp. z o.o.",
+      "finding_count": 1,
+      "max_severity": "HIGH",
+      "evidence_references": [
+        "GEV-001"
+      ]
+    },
+    {
+      "supplier_id": "MULTIPLE_OR_NOT_APPLICABLE",
+      "supplier_name": "Budget line aggregate",
+      "finding_count": 3,
+      "max_severity": "MEDIUM",
+      "evidence_references": [
+        "GEV-023",
+        "GEV-024",
+        "GEV-025"
+      ]
+    },
+    {
+      "supplier_id": "SUP-008",
+      "supplier_name": "Unknown Local Supplier Sp. z o.o.",
+      "finding_count": 2,
+      "max_severity": "MEDIUM",
+      "evidence_references": [
+        "GEV-010",
+        "GEV-011"
+      ]
+    },
+    {
+      "supplier_id": "SUP-005",
+      "supplier_name": "MedPaper Logistics Sp. z o.o.",
+      "finding_count": 1,
+      "max_severity": "MEDIUM",
+      "evidence_references": [
+        "GEV-003"
+      ]
+    }
+  ],
+  "zero_autonomy_boundary": {
+    "autonomous_enforcement_actions": 0,
+    "canonical_registry_opened": false,
+    "canonical_registry_mutated": false,
+    "production_records_mutated": false,
+    "payment_block_performed": false,
+    "supplier_punishment_performed": false,
+    "donor_compliance_conclusion_issued": false,
+    "fraud_verdict_issued": false,
+    "legal_conclusion_issued": false,
+    "signing_or_key_access_performed": false,
+    "external_execution_performed": false,
+    "pipeline_mode": "LOCAL_READ_ONLY_GRANT_EXPENSE_REVIEW_SIGNAL_GENERATION"
+  },
+  "interpretation_boundary": {
+    "fraud_verdict_issued": false,
+    "legal_conclusion_issued": false,
+    "donor_compliance_conclusion_issued": false,
+    "payment_block_performed": false,
+    "supplier_punishment_performed": false,
+    "human_review_required": true,
+    "statement": "This report contains evidence-backed review signals only. It does not issue fraud, legal, donor compliance, payment, or enforcement conclusions."
+  }
+}

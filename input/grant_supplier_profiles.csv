@@ -1,0 +1,8 @@
+supplier_id,supplier_name,declared_activity,supplier_role,capacity_score,registration_status,country,risk_note
+SUP-001,North Bridge Office Supplies Sp. z o.o.,office_supplies,office_materials_supplier,0.82,active,PL,Known supplier for office and administrative materials.
+SUP-002,QuickBuild Technical Services Sp. z o.o.,it_equipment;it_services,digital_infrastructure_supplier,0.76,active,PL,Known supplier for IT equipment and technical support.
+SUP-003,FreshStart Consulting Sp. z o.o.,consulting;governance_advisory,external_advisory_supplier,0.48,active,PL,Known advisory supplier with moderate delivery capacity requiring output traceability.
+SUP-004,GreenLeaf Catering Sp. z o.o.,event_catering,event_services_supplier,0.71,active,PL,Known supplier for workshop catering and event support.
+SUP-005,MedPaper Logistics Sp. z o.o.,travel_logistics;local_transport,participant_logistics_supplier,0.64,active,PL,Known supplier for local transport and participant support logistics.
+SUP-006,MicroNova Trade Sp. z o.o.,software_services;general_trade,technical_services_supplier,0.39,active,PL,Known supplier with mixed declared activity and limited capacity; review documentation carefully.
+SUP-007,ClearMed Equipment Group Sp. z o.o.,medical_equipment,medical_equipment_supplier,0.69,active,PL,Known medical equipment supplier; expenses should be checked against allowed budget category.

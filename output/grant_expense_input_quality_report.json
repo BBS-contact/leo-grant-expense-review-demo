@@ -1,0 +1,113 @@
+{
+  "report_id": "LOCAL_GRANT_EXPENSE_INPUT_QUALITY_REPORT",
+  "generated_at": "2026-06-14T09:05:12.651929+00:00",
+  "input_dir": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input",
+  "status": "READY_WITH_WARNINGS",
+  "summary": {
+    "file_count": 4,
+    "existing_file_count": 4,
+    "grant_expense_count": 15,
+    "budget_line_count": 8,
+    "reporting_rule_count": 12,
+    "supplier_profile_count": 7,
+    "issue_count": 5,
+    "error_count": 0,
+    "warning_count": 5,
+    "info_count": 0,
+    "ready_for_analysis": true
+  },
+  "files": {
+    "grant_expenses": {
+      "path": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_expenses.csv",
+      "exists": true,
+      "row_count": 15,
+      "column_count": 19,
+      "required_columns_present": true,
+      "missing_columns": [],
+      "extra_columns": []
+    },
+    "grant_budget_lines": {
+      "path": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_budget_lines.csv",
+      "exists": true,
+      "row_count": 8,
+      "column_count": 14,
+      "required_columns_present": true,
+      "missing_columns": [],
+      "extra_columns": []
+    },
+    "grant_reporting_rules": {
+      "path": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_reporting_rules.csv",
+      "exists": true,
+      "row_count": 12,
+      "column_count": 11,
+      "required_columns_present": true,
+      "missing_columns": [],
+      "extra_columns": []
+    },
+    "grant_supplier_profiles": {
+      "path": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_supplier_profiles.csv",
+      "exists": true,
+      "row_count": 7,
+      "column_count": 8,
+      "required_columns_present": true,
+      "missing_columns": [],
+      "extra_columns": []
+    }
+  },
+  "issues": [
+    {
+      "severity": "WARNING",
+      "code": "UNKNOWN_SUPPLIER_REFERENCE",
+      "message": "Expense references supplier_id without supplier profile: SUP-008",
+      "file": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_expenses.csv",
+      "row_number": 12,
+      "field": "supplier_id",
+      "value": "SUP-008"
+    },
+    {
+      "severity": "WARNING",
+      "code": "UNKNOWN_SUPPLIER_REFERENCE",
+      "message": "Expense references supplier_id without supplier profile: SUP-009",
+      "file": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_expenses.csv",
+      "row_number": 13,
+      "field": "supplier_id",
+      "value": "SUP-009"
+    },
+    {
+      "severity": "WARNING",
+      "code": "UNKNOWN_SUPPLIER_REFERENCE",
+      "message": "Expense references supplier_id without supplier profile: SUP-009",
+      "file": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_expenses.csv",
+      "row_number": 14,
+      "field": "supplier_id",
+      "value": "SUP-009"
+    },
+    {
+      "severity": "WARNING",
+      "code": "UNKNOWN_SUPPLIER_REFERENCE",
+      "message": "Expense references supplier_id without supplier profile: SUP-010",
+      "file": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_expenses.csv",
+      "row_number": 15,
+      "field": "supplier_id",
+      "value": "SUP-010"
+    },
+    {
+      "severity": "WARNING",
+      "code": "UNKNOWN_SUPPLIER_REFERENCE",
+      "message": "Expense references supplier_id without supplier profile: SUP-011",
+      "file": "D:\\BBS-09-01-2026\\repository_publication_staging\\leo-grant-expense-review-demo\\input\\grant_expenses.csv",
+      "row_number": 16,
+      "field": "supplier_id",
+      "value": "SUP-011"
+    }
+  ],
+  "zero_autonomy_boundary": {
+    "autonomous_enforcement_actions": 0,
+    "canonical_registry_opened": false,
+    "canonical_registry_mutated": false,
+    "production_records_mutated": false,
+    "signing_or_key_access_performed": false,
+    "external_execution_performed": false,
+    "pipeline_mode": "LOCAL_READ_ONLY_GRANT_EXPENSE_INPUT_QUALITY_ASSESSMENT"
+  }
+}

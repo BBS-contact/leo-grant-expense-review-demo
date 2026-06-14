@@ -1,0 +1,230 @@
+{
+  "package_type": "LEO_LOCAL_GRANT_EXPENSE_HUMAN_REVIEW_PACKAGE",
+  "package_version": "v0.4",
+  "exported_at": "2026-05-14T20:07:06.402Z",
+  "source_report_id": "LOCAL_GRANT_EXPENSE_REVIEW_REPORT",
+  "source_report_version": "v0.1",
+  "input_quality_status": "READY_WITH_WARNINGS",
+  "findings_count": 25,
+  "reviewed_findings_count": 3,
+  "review_actions": [
+    {
+      "finding_id": "GEV-001",
+      "action": "ESCALATE_FOR_REVIEW",
+      "note": "Large expense requires management/accounting review. Supporting contract, invoice, activity evidence, and budget justification should be checked before institutional acceptance.",
+      "reviewed_at": "2026-05-13T05:27:36.169Z",
+      "reviewer_mode": "LOCAL_BROWSER_REVIEW"
+    },
+    {
+      "finding_id": "GEV-006",
+      "action": "NEEDS_MORE_EVIDENCE",
+      "note": "Activity or output reference is missing. Reviewer requests project activity linkage before accepting the expense for reporting.",
+      "reviewed_at": "2026-05-13T05:28:37.441Z",
+      "reviewer_mode": "LOCAL_BROWSER_REVIEW"
+    },
+    {
+      "finding_id": "GEV-003",
+      "action": "ACCEPTED_AS_JUSTIFIED",
+      "note": "Cash reimbursement documentation reviewed locally for demo purposes. No autonomous compliance, legal, fraud, payment, or donor conclusion is issued by LEO.",
+      "reviewed_at": "2026-05-13T05:29:23.145Z",
+      "reviewer_mode": "LOCAL_BROWSER_REVIEW"
+    }
+  ],
+  "attachment_reviews_count": 2,
+  "attachment_reviews": [
+    {
+      "attachment_id": "ATT-002",
+      "action": "REVIEWED",
+      "note": "Contract reference reviewed locally for demo workflow. Supplier relationship, scope, amount, and authorization context require human institutional review. No PDF parsing, OCR, legal interpretation, or compliance conclusion performed.",
+      "reviewed_at": "2026-05-14T15:44:02.151Z",
+      "reviewer_mode": "LOCAL_BROWSER_DOCUMENT_REVIEW"
+    },
+    {
+      "attachment_id": "ATT-001",
+      "action": "NEEDS_REPLACEMENT",
+      "note": "Invoice reference requires replacement or updated supporting evidence before institutional handoff. No PDF parsing, OCR, legal interpretation, or compliance conclusion performed.",
+      "reviewed_at": "2026-05-14T17:23:54.084Z",
+      "reviewer_mode": "LOCAL_BROWSER_DOCUMENT_REVIEW"
+    }
+  ],
+  "reviewed_findings_snapshot": [
+    {
+      "finding_id": "GEV-001",
+      "title": "Large expense review",
+      "severity": "HIGH",
+      "signal_family": "large_expense_review",
+      "expense_id": "GE-002",
+      "supplier_id": "SUP-002",
+      "supplier_name": "QuickBuild Technical Services Sp. z o.o.",
+      "detected_signal": "Expense GE-002 amount 24000.00 PLN meets or exceeds the large expense threshold 10000.00.",
+      "reviewer_question": "Is this large expense supported by contract, invoice, activity evidence, and budget justification?",
+      "next_action": "Review supporting documents before accepting the expense.",
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-005",
+        "source_rule_name": "Large Expense Human Review Rule",
+        "source_rule_file": "LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/LARGE_EXPENSE_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A large grant expense requires human review when the amount is material enough to warrant additional budget, activity, supplier, and documentation checks.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-005",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "INTERNAL_POLICY",
+          "DONOR_RULE",
+          "PROCUREMENT_RULE",
+          "ACCOUNTING_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "management_board",
+          "internal_audit"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      },
+      "evidence_attachments": [],
+      "human_review": {
+        "finding_id": "GEV-001",
+        "action": "ESCALATE_FOR_REVIEW",
+        "note": "Large expense requires management/accounting review. Supporting contract, invoice, activity evidence, and budget justification should be checked before institutional acceptance.",
+        "reviewed_at": "2026-05-13T05:27:36.169Z",
+        "reviewer_mode": "LOCAL_BROWSER_REVIEW"
+      }
+    },
+    {
+      "finding_id": "GEV-003",
+      "title": "Cash reimbursement documentation review",
+      "severity": "MEDIUM",
+      "signal_family": "cash_reimbursement_documentation_review",
+      "expense_id": "GE-005",
+      "supplier_id": "SUP-005",
+      "supplier_name": "MedPaper Logistics Sp. z o.o.",
+      "detected_signal": "Expense GE-005 uses cash reimbursement with document_status 'partial'. Budget line cash permission: True.",
+      "reviewer_question": "Is the reimbursement supported by complete participant, recipient, or payment documentation?",
+      "next_action": "Review reimbursement documentation before accepting the expense.",
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-003",
+        "source_rule_name": "Cash Reimbursement Documentation Review Rule",
+        "source_rule_file": "CASH_REIMBURSEMENT_DOCUMENTATION_REVIEW_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/CASH_REIMBURSEMENT_DOCUMENTATION_REVIEW_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A cash reimbursement requires human review when supporting documentation, activity linkage, or reimbursement justification must be checked before audit packaging.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-003",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR",
+          "PL"
+        ],
+        "reference_domain": [
+          "ACCOUNTING_RULE",
+          "INTERNAL_POLICY",
+          "DONOR_RULE"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "accounting",
+          "internal_audit",
+          "management_board"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      },
+      "evidence_attachments": [],
+      "human_review": {
+        "finding_id": "GEV-003",
+        "action": "ACCEPTED_AS_JUSTIFIED",
+        "note": "Cash reimbursement documentation reviewed locally for demo purposes. No autonomous compliance, legal, fraud, payment, or donor conclusion is issued by LEO.",
+        "reviewed_at": "2026-05-13T05:29:23.145Z",
+        "reviewer_mode": "LOCAL_BROWSER_REVIEW"
+      }
+    },
+    {
+      "finding_id": "GEV-006",
+      "title": "Missing activity reference",
+      "severity": "MEDIUM",
+      "signal_family": "missing_activity_reference",
+      "expense_id": "GE-008",
+      "supplier_id": "SUP-003",
+      "supplier_name": "FreshStart Consulting Sp. z o.o.",
+      "detected_signal": "Expense GE-008 has no activity_reference, but its budget line requires a link to an activity or output.",
+      "reviewer_question": "Which project activity, output, or deliverable does this expense support?",
+      "next_action": "Request activity or output reference before accepting the expense for reporting.",
+      "rule_trace": {
+        "source_rule_id": "GER-RULE-006",
+        "source_rule_name": "Missing Activity Reference Review Rule",
+        "source_rule_file": "MISSING_ACTIVITY_REFERENCE_PROTOCOL_v0.1.md",
+        "protocol_reference": "protocols/grant_expense_review/MISSING_ACTIVITY_REFERENCE_PROTOCOL_v0.1.md",
+        "human_readable_rule": "A grant expense requires human review when it lacks an activity reference needed to connect the cost to a project activity, output, or implementation record.",
+        "verdict_boundary": "This rule creates a human review requirement only and does not create a donor compliance verdict, fraud finding, legal conclusion, payment block, supplier sanction, or autonomous enforcement action."
+      },
+      "normative_trace": {
+        "normative_trace_id": "NT-GER-006",
+        "trace_status": "REFERENCE_MAPPING_PENDING",
+        "jurisdiction": [
+          "INTERNAL",
+          "DONOR"
+        ],
+        "reference_domain": [
+          "GRANT_AGREEMENT",
+          "DONOR_RULE",
+          "INTERNAL_POLICY"
+        ],
+        "references": [],
+        "reference_confidence": "REFERENCE_NEEDS_VERIFICATION",
+        "legal_interpretation_status": "HUMAN_INTERPRETATION_REQUIRED",
+        "institutional_review_required": true,
+        "responsible_review_layer": [
+          "project_manager",
+          "accounting"
+        ],
+        "verdict_boundary": "LEO identifies potentially relevant normative references and review requirements only. LEO does not issue legal conclusions, donor compliance conclusions, payment decisions, supplier sanctions, or enforcement conclusions."
+      },
+      "evidence_attachments": [],
+      "human_review": {
+        "finding_id": "GEV-006",
+        "action": "NEEDS_MORE_EVIDENCE",
+        "note": "Activity or output reference is missing. Reviewer requests project activity linkage before accepting the expense for reporting.",
+        "reviewed_at": "2026-05-13T05:28:37.441Z",
+        "reviewer_mode": "LOCAL_BROWSER_REVIEW"
+      }
+    }
+  ],
+  "evidence_attachment_export_boundary": {
+    "attachment_metadata_included": true,
+    "document_files_embedded": false,
+    "document_files_opened": false,
+    "document_files_parsed": false,
+    "ocr_performed": false,
+    "ai_document_reading_performed": false,
+    "document_signing_performed": false,
+    "external_transmission_performed": false,
+    "statement": "Evidence attachments are exported as local reference metadata only. The package does not embed, open, parse, OCR, summarize, sign, transmit, or validate attached documents."
+  },
+  "zero_autonomy_boundary": {
+    "no_donor_compliance_verdict": true,
+    "no_fraud_verdict": true,
+    "no_legal_conclusion": true,
+    "no_payment_blocking": true,
+    "no_supplier_punishment": true,
+    "no_production_mutation": true,
+    "no_canonical_registry_mutation": true,
+    "no_autonomous_enforcement": true,
+    "no_signing_or_key_access": true,
+    "no_external_execution": true
+  }
+}
