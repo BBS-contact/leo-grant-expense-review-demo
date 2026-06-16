@@ -128,21 +128,54 @@ Demo Package Checks Failed:
 0
 ```
 
+## Run Tests
+
+~~~bash
+pytest
+~~~
+
+Expected result:
+
+~~~text
+24 passed
+~~~
+
+## Run the Demo Pipeline
+
+~~~bash
+python grant_expense_input_quality_report.py
+python grant_expense_review_pipeline.py
+python grant_expense_evidence_report_validator.py
+python grant_expense_demo_package_validator.py
+~~~
+
+## Review Generated Outputs
+
+Generated artifacts:
+
+~~~text
+output/grant_expense_input_quality_report.json
+output/grant_expense_evidence_report.json
+output/leo_grant_expense_human_review_package_v0.4.json
+~~~
+
+Reviewers should inspect generated outputs together with source inputs, protocols, tests, and dashboard artifacts.
+
 ## Human Review Workflow
 
 The demonstration follows a review-first workflow:
 
 ```text
 Input Validation
-        ↓
+        ->
 Evidence Generation
-        ↓
+        ->
 Evidence Validation
-        ↓
+        ->
 Human Review Package
-        ↓
+        ->
 Reviewer Dashboard
-        ↓
+        ->
 Human Decision Making
 ```
 
